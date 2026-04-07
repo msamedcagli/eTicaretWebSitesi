@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlas Teknoloji</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-wrapper">
+            
+            <div class="tabs">
+                <button class="tab-btn active" id="tabLogin">Giriş Yap</button>
+                <button class="tab-btn" id="tabRegister">Kayıt Ol</button>
+            </div>
+
+            <!-- LOGIN -->
+            <div id="loginSection" class="form-section active">
+                <div class="form-header">
+                    <h1>Giriş Yap</h1>
+                    <p>Alışverişe devam etmek için giriş yapın</p>
+                </div>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="loginEmail">E-posta Adresi</label>
+                        <input type="email" id="loginEmail" name="loginEmail" required placeholder="ornek@mail.com">
+                    </div>
+                    <div class="input-group">
+                        <label for="loginPassword">Parola</label>
+                        <input type="password" id="loginPassword" name="loginPassword" required placeholder="••••••••">
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
+                        <label for="rememberMe">Beni hatırla</label>
+                    </div>
+                    <button type="submit" class="btn-submit" id="loginSubmitBtn">Giriş Yap</button>
+                </form>
+                <div id="loginMessage" class="message"></div>
+            </div>
+
+            <!-- REGISTER -->
+            <div id="registerSection" class="form-section">
+                <div class="form-header">
+                    <h1>Kayıt Ol</h1>
+                    <p>Aramıza katılın ve alışverişin keyfini çıkarın</p>
+                </div>
+                <form id="registerForm">
+                    <div class="input-group">
+                        <label for="email">E-posta Adresi</label>
+                        <input type="email" id="email" name="email" required placeholder="ornek@mail.com">
+                    </div>
+                    <div class="input-group">
+                        <label for="phone">Telefon Numarası</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="0555 555 5555" pattern="[0-9]{10,11}">
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Parola</label>
+                        <input type="password" id="password" name="password" required placeholder="••••••••" minlength="6">
+                    </div>
+                    <div class="input-group">
+                        <label for="confirmPassword">Parola (Tekrar)</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="••••••••" minlength="6">
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="kvkk" name="kvkk" required>
+                        <label for="kvkk"><a href="#" class="link">KVKK</a> aydınlatmasını onaylıyorum.</label>
+                    </div>
+                    <button type="submit" class="btn-submit" id="registerSubmitBtn">Kayıt Ol</button>
+                </form>
+                <div id="registerMessage" class="message"></div>
+            </div>
+
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

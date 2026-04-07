@@ -1,0 +1,183 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background: #ffffff;
+    color: #333333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 480px; /* Kart genişletildi */
+    padding: 15px;
+}
+
+.form-wrapper {
+    background: #f7f8fa;
+    border: 1px solid #eef0f3;
+    border-radius: 16px;
+    padding: 32px 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.3s ease;
+    overflow: hidden; /* For smooth transitions */
+    min-height: 630px; /* Kayıt ol formunun uzunluğuna göre sabitlendi, geçişte sıçrama yapmaz */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    background: #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    padding: 4px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    background: #ffffff;
+    color: #111827;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Sections */
+.form-section {
+    display: none;
+    animation: fadeIn 0.4s ease forwards;
+    flex-grow: 1;
+}
+
+.form-section.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Login alanı kısaysa ortalasın diye */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.form-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a24;
+    margin-bottom: 6px;
+}
+
+.form-header p {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.input-group { margin-bottom: 12px; }
+
+.input-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #4b5563;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    color: #111827;
+    font-size: 14px;
+    font-family: 'Outfit', sans-serif;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-group input::placeholder { color: #9ca3af; }
+
+.input-group input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    gap: 8px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-top: 2px;
+    accent-color: #6366f1;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.checkbox-group label {
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.link { color: #6366f1; text-decoration: none; font-weight: 500; }
+.link:hover { text-decoration: underline; }
+
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: #111827;
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-submit:hover { background: #374151; }
+.btn-submit:active { transform: scale(0.98); }
+.btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.message {
+    margin-top: 16px;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 13px;
+    display: none;
+}
+
+.message.success { display: block; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+.message.error { display: block; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+/* Login Ekranı Özel Boşlukları (Spesifik olarak araları açıldı) */
+#loginSection .form-header { margin-bottom: 32px; }
+#loginSection .input-group { margin-bottom: 24px; }
+#loginSection .checkbox-group { margin-bottom: 32px; }
