@@ -12,6 +12,23 @@ npm install
 
 Bu komut, `package.json` dosyamızda belirtilmiş olan bütün paketleri indirecek ve `node_modules` klasörünü otomatik olarak oluşturacaktır.
 
+## 🟢 Sistemi Çalıştırma
+
+### 1. Backend (Sunucu) Başlatma
+Sunucu kodları ve geçici JSON veri tabanımız `server` klasörünün içindedir. Terminaliniz proje ana dizinindeyse öncelikle arka plan sunucusunu başlatmanız gerekir:
+
+```bash
+cd server
+node src/index.js
+```
+*Başarılı bir şekilde çalıştığında terminalde "Sunucu http://localhost:3000 portunda çalışıyor." bilgisini göreceksiniz. (Arayüzde çalışırken bu terminalin arkada açık kaldığından emin olun.)*
+
+### 2. Frontend (Kullanıcı Arayüzü) Başlatma
+Projenin kullanıcı arayüzü statik web (HTML, CSS, JS) teknolojisinde hazırlandığı için herhangi bir terminal komutuna (npm start vb.) ihtiyaç duymaz. Doğrudan dosyalara çift tıklayarak çalıştırılır:
+- Ana klasör içerisindeki `client/login/` dizinine gidin.
+- İçindeki `index.html` dosyasını Chrome v.b tarayıcıda açın.
+*(Ekranda dolduracağınız bilgiler, doğrudan açık durumdaki backend API sunucunuza iletilip geçici JSON dosyasında yedeklenecektir.)*
+
 ## 📂 Klasör ve Mimari Yapısı
 
 Projemizin düzenli olarak ölçeklenebilmesi ve takım içinde karışıklık çıkmaması için temel ve temiz bir klasör yapısı oluşturulmuştur. Node projemizin ana geliştirme klasörü **`src/`** dizinidir.
