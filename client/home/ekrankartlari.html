@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtlasTech - Ekran Kartları (GPU)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <h2><a href="index.html"><i class="fa-solid fa-microchip"></i> AtlasTech</a></h2>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Ekran kartı ara...">
+            <button><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <div class="user-actions">
+            <a href="#"><i class="fa-regular fa-user"></i> Hesabım</a>
+            <a href="#"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+        </div>
+    </header>
+
+    <nav class="category-nav">
+        <ul>
+            <li><a href="index.html">Ana Sayfa</a></li>
+            <li><a href="islemciler.html">İşlemciler (CPU)</a></li>
+            <li><a href="ekran-kartlari.html" style="color: #38bdf8; font-weight: bold;">Ekran Kartları (GPU)</a></li>
+            <li><a href="anakart.html">Anakartlar</a></li>
+            <li><a href="#">Bellekler (RAM)</a></li>
+        </ul>
+    </nav>
+
+    <main class="products-section">
+        <h2 class="section-title">Ekran Kartı (GPU) Kategorisi</h2>
+        
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1591489378430-ef2f4c626b35?auto=format&fit=crop&w=300&q=80" alt="GPU">
+                <h4>ASUS ROG Strix RTX 4090 24GB</h4>
+                <p class="category">Ekran Kartı (GPU)</p>
+                <p class="price">84.999,00 TL</p>
+                <button class="add-to-cart"><i class="fa-solid fa-cart-plus"></i> Sepete Ekle</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1590740636267-2856554b5df7?auto=format&fit=crop&w=300&q=80" alt="GPU">
+                <h4>MSI GeForce RTX 4070 Ti 12GB</h4>
+                <p class="category">Ekran Kartı (GPU)</p>
+                <p class="price">34.999,00 TL</p>
+                <button class="add-to-cart"><i class="fa-solid fa-cart-plus"></i> Sepete Ekle</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1587202372634-32705e3bf49c?auto=format&fit=crop&w=300&q=80" alt="GPU">
+                <h4>Sapphire Radeon RX 7900 XTX 24GB</h4>
+                <p class="category">Ekran Kartı (GPU)</p>
+                <p class="price">42.500,00 TL</p>
+                <button class="add-to-cart"><i class="fa-solid fa-cart-plus"></i> Sepete Ekle</button>
+            </div>
+
+            <div class="product-card">
+                <span class="badge">Tükendi</span>
+                <img src="https://images.unsplash.com/photo-1555617766-c94804975da3?auto=format&fit=crop&w=300&q=80" alt="GPU">
+                <h4>Gigabyte RTX 4060 Ti Eagle 8GB</h4>
+                <p class="category">Ekran Kartı (GPU)</p>
+                <p class="price">14.200,00 TL</p>
+                <button class="add-to-cart disabled" disabled>Stokta Yok</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1591489378430-ef2f4c626b35?auto=format&fit=crop&w=300&q=80" alt="GPU">
+                <h4>ASUS Dual RTX 4060 8GB OC</h4>
+                <p class="category">Ekran Kartı (GPU)</p>
+                <p class="price">11.500,00 TL</p>
+                <button class="add-to-cart"><i class="fa-solid fa-cart-plus"></i> Sepete Ekle</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1587202372634-32705e3bf49c?auto=format&fit=crop&w=300&q=80" alt="GPU">
+                <h4>MSI Ventus RTX 4080 16GB</h4>
+                <p class="category">Ekran Kartı (GPU)</p>
+                <p class="price">48.900,00 TL</p>
+                <button class="add-to-cart"><i class="fa-solid fa-cart-plus"></i> Sepete Ekle</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content expanded">
+            <span class="close-btn">&times;</span>
+            <div class="modal-body">
+                <div class="modal-left"><img id="modalImg" src="" alt="Ürün"></div>
+                <div class="modal-right">
+                    <p id="modalCategory" class="popup-category"></p>
+                    <h2 id="modalTitle"></h2>
+                    <div class="rating">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        <span>(48 Değerlendirme)</span>
+                    </div>
+                    <hr>
+                    <div class="price-section"><h3 id="modalPrice"></h3><p class="stok-durumu"></p></div>
+                    <div class="features-list">
+                        <h4>Görsel Teknolojiler:</h4>
+                        <ul>
+                            <li><i class="fa-solid fa-microchip"></i> Ray Tracing & DLSS 3 Desteği</li>
+                            <li><i class="fa-solid fa-fan"></i> Gelişmiş Üçlü Fan Soğutma</li>
+                        </ul>
+                    </div>
+                    <hr>
+                    <p id="modalDesc" class="full-desc"></p>
+                    <div class="action-buttons">
+                        <div class="quantity-selector"><button>-</button><input type="number" value="1" min="1"><button>+</button></div>
+                        <button class="add-to-cart-btn expanded-btn">Sepete Ekle</button>
+                        <button class="wishlist-btn"><i class="fa-regular fa-heart"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

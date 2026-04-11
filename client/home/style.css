@@ -146,3 +146,264 @@ ul { list-style: none; }
 .column ul li a:hover { color: #38bdf8; }
 .social-icons a { font-size: 24px; margin-right: 15px; color: #94a3b8; transition: 0.3s;}
 .social-icons a:hover { color: white; }
+
+/* Modal Arka Planı */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 9999;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.7);
+}
+
+/* Modal Kutusu */
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    width: 60%;
+    max-width: 700px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Kapatma Butonu */
+.close-btn {
+    position: absolute;
+    right: 20px; top: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-body {
+    display: flex;
+    gap: 30px;
+}
+
+.modal-left img {
+    width: 250px;
+    border-radius: 8px;
+}
+
+.add-to-cart-btn {
+    background-color: #2b65e3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+}
+/* MODAL GENİŞLETME VE ZENGİNLEŞTİRME CSS */
+
+/* Pencereyi Büyüt */
+.modal-content.expanded {
+    width: 80%; /* Genişliği artırdık */
+    max-width: 900px; /* Maksimum genişliği artırdık */
+    margin: 5% auto; /* Biraz daha yukarı aldık */
+    padding: 30px; /* İç boşluğu artırdık */
+}
+
+/* İki Sütun Düzeni */
+.modal-body {
+    display: flex;
+    gap: 40px; /* Sütunlar arası boşluğu artırdık */
+    align-items: flex-start;
+}
+
+/* Sol Taraf (Resim) */
+.modal-left {
+    flex: 1;
+    position: sticky; /* Resim aşağı kayarken sabit kalsın */
+    top: 20px;
+}
+
+.modal-left img {
+    width: 100%; /* Resim sütunu kaplasın */
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Sağ Taraf (Bilgi) */
+.modal-right {
+    flex: 1.5; /* Bilgi tarafı biraz daha geniş olsun */
+    text-align: left;
+}
+
+/* Yeni Eleman Stilleri */
+.popup-category {
+    color: #64748b;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+#modalTitle {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.rating {
+    color: #f59e0b; /* Altın sarısı yıldızlar */
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+.rating span { color: #64748b; margin-left: 10px; }
+
+.price-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+}
+
+#modalPrice {
+    font-size: 32px;
+    color: #2563eb;
+}
+
+.stok-durumu {
+    color: #16a34a; /* Yeşil stok yazısı */
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.short-desc ul {
+    margin: 15px 0;
+    padding-left: 0;
+}
+
+.short-desc li {
+    list-style: none;
+    margin-bottom: 8px;
+    color: #475569;
+    font-size: 15px;
+}
+.short-desc li i { color: #2563eb; margin-right: 10px; width: 20px; text-align: center;}
+
+.full-desc {
+    color: #1e293b;
+    line-height: 1.7;
+    margin: 15px 0 25px 0;
+}
+
+/* Butonlar */
+.btn-secondary {
+    background: none;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+.btn-secondary:hover { background-color: #f1f5f9; border-color: #94a3b8;}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: auto;
+}
+
+.quantity-selector {
+    display: flex;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    overflow: hidden;
+}
+.quantity-selector button {
+    background-color: #f1f5f9;
+    border: none;
+    padding: 0 15px;
+    cursor: pointer;
+    font-size: 18px;
+}
+.quantity-selector input {
+    width: 50px;
+    text-align: center;
+    border: none;
+    border-left: 1px solid #cbd5e1;
+    border-right: 1px solid #cbd5e1;
+    outline: none;
+}
+
+.add-to-cart-btn.expanded-btn {
+    flex: 1; /* Kalan boşluğu kaplasın */
+    background-color: #2563eb;
+    margin-top: 0; /* HTML'deki margin-top'ı sıfırladık */
+}
+/* Sayı girişindeki varsayılan okları kaldırır */
+.quantity-selector input::-webkit-outer-spin-button,
+.quantity-selector input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.wishlist-btn {
+    background: white;
+    border: 1px solid #cbd5e1;
+    color: #64748b;
+    width: 50px;
+    height: 50px; /* Sepete ekle butonuyla aynı yükseklikte olmalı */
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.wishlist-btn:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+    background-color: #fef2f2;
+}
+
+/* Tıklandığında kalbin dolması için (Opsiyonel JS ile kullanılabilir) */
+.wishlist-btn.active {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: white;
+}
+/* --- KATEGORİ SAYFASI DÜZENLEMELERİ --- */
+
+/* Kategori başlığı için ekstra boşluk ve stil */
+.products-section .section-title {
+    margin-top: 50px;
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: #0f172a;
+    border-left: 5px solid #2563eb;
+    padding-left: 15px;
+}
+
+/* Kategori sayfasında içeriğin minimum yüksekliği (Footer'ın yukarı çıkmaması için) */
+main.products-section {
+    min-height: 70vh;
+}
+
+/* Ürün kartlarının kategori sayfasında daha vurgulu durması için */
+.product-grid {
+    margin-bottom: 50px;
+}
+
+/* Kategori sayfasındaki "Geri Dön" veya "Ekmek Kırıntısı (Breadcrumb)" için (İsteğe bağlı) */
+.breadcrumb {
+    max-width: 1200px;
+    margin: 20px auto 0;
+    padding: 0 20px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.breadcrumb a {
+    color: #2563eb;
+    margin-right: 5px;
+}
