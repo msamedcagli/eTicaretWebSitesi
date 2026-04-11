@@ -27,25 +27,25 @@ function showMessage(elId, text, type) {
 // Register Form Submit
 document.getElementById('registerForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const email = document.getElementById('email').value;
     const phone = document.getElementById('phone').value;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
     const kvkk = document.getElementById('kvkk').checked;
     const submitBtn = document.getElementById('registerSubmitBtn');
-    
+
     document.getElementById('registerMessage').className = 'message';
-    
-    if(password !== confirmPassword) {
+
+    if (password !== confirmPassword) {
         showMessage('registerMessage', 'Parolalar eşleşmiyor!', 'error');
         return;
     }
-    
+
     const originalText = submitBtn.textContent;
     submitBtn.textContent = 'Kaydediliyor...';
     submitBtn.disabled = true;
-    
+
     try {
         const response = await fetch('http://localhost:3000/api/auth/register', {
             method: 'POST',
@@ -53,7 +53,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
             body: JSON.stringify({ email, phone, password, kvkk })
         });
         const data = await response.json();
-        if(response.ok) {
+        if (response.ok) {
             showMessage('registerMessage', data.message || 'Kayıt başarılı!', 'success');
             document.getElementById('registerForm').reset();
             // Automatically switch to login after short delay
@@ -72,17 +72,17 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
 // Login Form Submit
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     const submitBtn = document.getElementById('loginSubmitBtn');
-    
+
     document.getElementById('loginMessage').className = 'message';
-    
+
     const originalText = submitBtn.textContent;
     submitBtn.textContent = 'Giriş Yapılıyor...';
     submitBtn.disabled = true;
-    
+
     try {
         const response = await fetch('http://localhost:3000/api/auth/login', {
             method: 'POST',
@@ -90,10 +90,18 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             body: JSON.stringify({ email, password })
         });
         const data = await response.json();
-        
-        if(response.ok) {
+
+        if (response.ok) {
             showMessage('loginMessage', 'Giriş Başarılı! Yönlendiriliyorsunuz...', 'success');
-            // Token/User işlemlerinden sonra anasayfaya yönlendirilecek.
+
+            // 1. Arka plandan (backend) gelen bilgileri tarayıcının kasasına (localStorage) şifreleyerek kaydet
+            localStorage.setItem('kullaniciBilgileri', JSON.stringify(data));
+
+            // 2. Kullanıcı "Giriş Başarılı" yazısını okuyabilsin diye 1.5 saniye bekleyip ana sayfaya yönlendir
+            setTimeout(() => {
+                // Klasör yapısına göre bir üst klasöre çıkıp home içindeki index.html'e gidiyoruz
+                window.location.href = '../home/index.html';
+            }, 1500);
         } else {
             showMessage('loginMessage', data.error || 'Giriş başarısız.', 'error');
         }
