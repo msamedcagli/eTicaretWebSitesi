@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtlasTech - Bilgisayar Parçaları</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <h2><a href="index.html"><i class="fa-solid fa-microchip"></i> AtlasTech</a></h2>
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" placeholder="İşlemci, ekran kartı, anakart ara...">
+            <button><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+        <div class="user-actions">
+            <a href="../login/index.html"><i class="fa-regular fa-user"></i> Hesabım</a>
+            <a href="#"><i class="fa-regular fa-heart"></i> Favoriler</a>
+            <a href="#"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+        </div>
+    </header>
+
+    <nav class="category-nav">
+        <ul>
+            <li><a href="#">İşlemciler (CPU)</a></li>
+            <li><a href="#">Ekran Kartları (GPU)</a></li>
+            <li><a href="#">Anakartlar</a></li>
+            <li><a href="#">Bellekler (RAM)</a></li>
+            <li><a href="#">Depolama (SSD)</a></li>
+            <li><a href="#">Hazır Sistemler</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="slider-container">
+            <div class="slide active">
+                <img src="https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=1200&q=80" alt="İşlemci Kampanyası">
+                <div class="slide-caption">Yeni Nesil İşlemcilerde %15 İndirim!</div>
+            </div>
+            <div class="slide">
+                <img src="https://images.unsplash.com/photo-1587202372634-32705e3bf49c?auto=format&fit=crop&w=1200&q=80" alt="Ekran Kartı Kampanyası">
+                <div class="slide-caption">RTX 4000 Serisi Stoklarda!</div>
+            </div>
+            
+            <button class="prev-btn" onclick="changeSlide(-1)">&#10094;</button>
+            <button class="next-btn" onclick="changeSlide(1)">&#10095;</button>
+        </section>
+
+        <section class="products-section">
+            <h3 class="section-title">Çok Satan Donanımlar</h3>
+            <div class="product-grid">
+                
+                <div class="product-card">
+                    <span class="badge">Tükendi</span>
+                    <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=300&q=80" alt="İşlemci">
+                    <h4>AMD Ryzen 5 7600X 4.7GHz</h4>
+                    <p class="category">İşlemci (CPU)</p>
+                    <p class="price">7.499,00 TL</p>
+                    <button class="add-to-cart disabled" disabled>Stokta Yok</button>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1590740636267-2856554b5df7?auto=format&fit=crop&w=300&q=80" alt="Ekran Kartı">
+                    <h4>MSI GeForce RTX 4070 Ti</h4>
+                    <p class="category">Ekran Kartı (GPU)</p>
+                    <p class="price">34.999,00 TL</p>
+                    <button class="add-to-cart"><i class="fa-solid fa-cart-plus"></i> Sepete Ekle</button>
+                </div>
+
+                 <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=300&q=80" alt="Anakart">
+                    <h4>ASUS ROG STRIX B650-A</h4>
+                    <p class="category">Anakart</p>
+                    <p class="price">8.250,00 TL</p>
+                    <button class="add-to-cart"><i class="fa-solid fa-cart-plus"></i> Sepete Ekle</button>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1628038753265-51ff10ec0ce2?auto=format&fit=crop&w=300&q=80" alt="RAM">
+                    <h4>Corsair Vengeance 32GB DDR5</h4>
+                    <p class="category">Bellek (RAM)</p>
+                    <p class="price">4.100,00 TL</p>
+                    <button class="add-to-cart"><i class="fa-solid fa-cart-plus"></i> Sepete Ekle</button>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-columns">
+            <div class="column">
+                <h4>AtlasTech</h4>
+                <p>En yeni bilgisayar parçaları, güvenli alışveriş ve hızlı kargo ile kapınızda.</p>
+            </div>
+            <div class="column">
+                <h4>Müşteri Hizmetleri</h4>
+                <ul>
+                    <li><a href="#">Sıkça Sorulan Sorular (SSS)</a></li>
+                    <li><a href="#">İptal ve İade Koşulları</a></li>
+                </ul>
+            </div>
+            <div class="column">
+                <h4>Bizi Takip Edin</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-discord"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
