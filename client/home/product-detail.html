@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtlasTech - Ürün Detayı</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <h2><a href="index.html">ATLAS<span>TECH</span></a></h2>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Ürün, kategori veya marka ara...">
+            <button><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <div class="user-actions">
+            <a href="#"><i class="fa-regular fa-user"></i> Giriş Yap</a>
+            <a href="#"><i class="fa-regular fa-heart"></i> Favorilerim</a>
+            <a href="#"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+        </div>
+    </header>
+
+    <nav class="category-nav">
+        <ul>
+            <li><a href="index.html">Ana Sayfa</a></li>
+            <li><a href="islemciler.html">İşlemciler</a></li>
+            <li><a href="ekrankartlari.html">Ekran Kartları</a></li>
+            <li><a href="anakartlar.html">Anakartlar</a></li>
+            <li><a href="#">Ram</a></li>
+            <li><a href="#">Depolama</a></li>
+        </ul>
+    </nav>
+
+    <main class="product-detail-container">
+        <nav class="breadcrumb-detail">
+            <a href="index.html">Ana Sayfa</a> > <span id="detailCategory">Kategori</span> > <span id="breadcrumbTitle">Ürün</span>
+        </nav>
+
+        <div class="product-detail-wrapper">
+            <div class="product-detail-left">
+                <img id="detailImg" src="https://via.placeholder.com/500" alt="Ürün">
+            </div>
+
+            <div class="product-detail-right">
+                <h1 id="detailTitle">Ürün Yükleniyor...</h1>
+                
+                <div class="rating-stars">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star-half-stroke"></i>
+                    <span>(150 Değerlendirme)</span>
+                </div>
+
+                <div class="detail-price">
+                    <h2 id="detailPrice">0,00 TL</h2>
+                </div>
+
+                <div id="detailStock" class="stock-info">
+                    </div>
+
+                <p class="product-description-text">
+                    AtlasTech güvencesiyle sunulan bu ürün, en yüksek performans testlerinden başarıyla geçmiştir. 
+                    2 yıl distribütör garantili ve orijinal kutusundadır.
+                </p>
+
+                <div class="detail-actions">
+                    <div class="quantity-control">
+                        <button id="minus">-</button>
+                        <input type="number" value="1" id="qty" readonly>
+                        <button id="plus">+</button>
+                    </div>
+
+                    <button class="add-to-cart-big">
+                        <i class="fa-solid fa-cart-plus"></i> SEPETE EKLE
+                    </button>
+
+                    <button class="fav-big-btn">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-columns">
+            <div class="column">
+                <h4>ATLASTECH</h4>
+                <p>Türkiye'nin lider teknoloji marketi.</p>
+            </div>
+            <div class="column">
+                <h4>Kurumsal</h4>
+                <ul>
+                    <li><a href="#">Hakkımızda</a></li>
+                    <li><a href="#">İletişim</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="detail.js"></script>
+</body>
+</html>
