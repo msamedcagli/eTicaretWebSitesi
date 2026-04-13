@@ -48,4 +48,12 @@ Tüm ana kodlarımız `src` altında aşağıda belirtilen dizinlerde görev the
 - **`services/`** : Controller'da oluşabilecek aşırı kod yığılmasını önlemek amacıyla veritabanı veya 3. parti API isteklerinin (Ağır iş ve lojiklerin) operasyonu bu bölüme devredilir.
 - **`utils/`** : Çeşitli yardımcı ve ortak kullanıma sahip destek fonksiyonları (Şifre hash'leme aracı, mail atıcı, özel tarih formatlayıcı vb.) bulunacaktır.
 
+### ⚙️ Ortam Değişkenleri ve Veritabanı Kurulumu
+
+Projenin veritabanı altyapısı SQL Server üzerine kuruludur. Güvenlik sebebiyle `.env` dosyamız GitHub'da yer almamaktadır. Projeyi kendi bilgisayarınızda sorunsuz çalıştırmak için şu adımları izleyin:
+
+1. Proje dizininde bulunan `.env.example` dosyasının bir kopyasını oluşturun veya adını `.env` olarak değiştirin.
+2. Yeni oluşturduğunuz `.env` dosyasını açın ve `DB_SERVER` değişkeninin karşısına kendi yerel SQL Server adınızı (örneğin: `BILGISAYAR_ADI\SQLEXPRESS`) yazın.
+3. Gerekli paketleri kurmak için terminalde `npm install` komutunu çalıştırın.
+
 *Bilgilendirme:* İlerleyen süreçlerde projemize yeni özellikler gelirse dokümantasyonu yeni bağımlılık ve eklentilere göre hep beraber güncelleyeceğiz. İyi çalışmalar takım! 🚀
