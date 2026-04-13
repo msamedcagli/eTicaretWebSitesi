@@ -18,3 +18,8 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Sunucu http://localhost:${PORT} portunda çalışıyor.`);
 });
+
+const { connectDB } = require('./data/db'); // db.js dosyası src/data içinde olduğu için
+
+// Uygulama ayağa kalkarken veritabanı bağlantısını başlat
+connectDB();
