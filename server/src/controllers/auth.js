@@ -69,3 +69,27 @@ exports.login = async (req, res) => {
         res.status(500).json({ error: 'Sunucu hatası oluştu.' });
     }
 };
+// Profil bilgilerini getiren fonksiyon
+// controllers/auth.js
+exports.getProfile = async (req, res) => {
+    try {
+        const { sql } = require('../data/db');
+        const userEmail = req.query.email; // Frontend'den gelen e-posta
+
+        if (!userEmail) {
+            return res.status(400).json({ message: "E-posta adresi gerekli" });
+        }
+
+        // Veritabanından o e-postaya ait tüm bilgileri çekiyoruz
+        const result = await sql.query`SELECT Name, Email, Phone, CreatedAt FROM Users WHERE Email = ${userEmail}`;
+        
+        if (result.recordset.length > 0) {
+            res.json(result.recordset[0]);
+        } else {
+            res.status(404).json({ message: "Kullanıcı bulunamadı" });
+        }
+    } catch (err) {
+        console.error("Profil çekme hatası:", err);
+        res.status(500).json({ message: "Sunucu hatası" });
+    }
+};

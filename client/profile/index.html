@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilim | E-Ticaret</title>
+    <link rel="stylesheet" href="style.css">
+    </head>
+<body>
+    <nav class="navbar">
+        <div class="logo">AtlasTech</div>
+        <div class="nav-links">
+            <a href="../home/index.html">Ana Sayfa</a>
+            <a href="#" id="nav-profile-link">Profil</a> 
+        </div>
+    </nav>
+
+    <main class="profile-container">
+        <aside class="profile-sidebar">
+            <div class="user-avatar">
+                <img src="https://ui-avatars.com/api/?name=Mustafa+Selvitop&background=random&color=fff&size=150" alt="Kullanıcı Profil Fotoğrafı" id="profile-image">
+                <h3 id="sidebar-name">Mustafa Selvitop</h3>
+            </div>
+            <ul class="sidebar-menu">
+    <li class="active"><a href="#"><i class="fa-solid fa-address-card"></i> Hesap Bilgilerim</a></li>
+    <li><a href="#"><i class="fa-solid fa-box-open"></i> Sipariş Geçmişi</a></li>
+    <li><a href="favorilerim.html"><i class="fa-solid fa-heart"></i> Favorilerim</a></li>
+    
+    <li><a href="#" id="logout-btn" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</a></li>
+</ul>
+        </aside>
+
+        <section class="profile-content">
+            <h2 class="section-title">Hesap Bilgilerim</h2>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <span class="card-label">Ad Soyad</span>
+                    <h4 id="profile-name">Yükleniyor...</h4>
+                </div>
+                <div class="info-card">
+                    <span class="card-label">E-Posta Adresi</span>
+                    <h4 id="profile-email">Yükleniyor...</h4>
+                </div>
+                <div class="info-card">
+                    <span class="card-label">Telefon Numarası</span>
+                    <h4 id="profile-phone">+90 (555) 000 00 00</h4>
+                </div>
+                <div class="info-card">
+                    <span class="card-label">Kayıt Tarihi</span>
+                    <h4 id="profile-date">18 Nisan 2026</h4>
+                </div>
+            </div>
+<h2 class="section-title" style="margin-top: 2rem;">Güvenlik</h2>
+<div class="info-card password-card">
+    <span class="card-label">Şifre Değiştirme İşlemleri</span>
+    <form id="change-password-form">
+        <div class="password-inputs">
+            <input type="password" id="current-password" placeholder="Mevcut Şifre" required>
+            <input type="password" id="new-password" placeholder="Yeni Şifre" required>
+        </div>
+        <button type="submit" class="btn-update">Şifreyi Güncelle</button>
+    </form>
+    <div id="password-message"></div>
+</div>
+            <h2 class="section-title" style="margin-top: 2rem;">Son Siparişlerim</h2>
+            <div class="order-list">
+                <div class="order-card">
+                    <div class="order-header">
+                        <span class="order-no">Sipariş No: #SP-8472</span>
+                        <span class="order-status success">Teslim Edildi</span>
+                    </div>
+                    <div class="order-body">
+                        <p><strong>Ürün:</strong> AMD Ryzen 9 7950X 4.5GHz</p>
+                        <p><strong>Tutar:</strong> 16,899,00 TL</p>
+                    </div>
+                </div>
+                <div class="order-card">
+                    <div class="order-header">
+                        <span class="order-no">Sipariş No: #SP-8499</span>
+                        <span class="order-status pending">Hazırlanıyor</span>
+                    </div>
+                    <div class="order-body">
+                        <p><strong>Ürün:</strong> ASUS ROG Maximus Z790 Hero</p>
+                        <p><strong>Tutar:</strong> 22,450,00 TL</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

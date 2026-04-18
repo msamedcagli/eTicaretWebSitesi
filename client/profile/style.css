@@ -1,0 +1,276 @@
+/* AtlasTech Modern Renk Paleti */
+:root {
+    --primary-dark: #0f172a;    /* Ana sayfa navbar rengi */
+    --accent-blue: #3b82f6;     /* Teknoloji mavisi */
+    --accent-orange: #e67e22;   /* Vurgu turuncusu */
+    --bg-slate: #f8fafc;
+    --card-white: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --success-bg: #dcfce7;
+    --success-text: #166534;
+    --pending-bg: #fef3c7;
+    --pending-text: #b45309;
+    --border-radius: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', 'Segoe UI', sans-serif;
+}
+
+body {
+    background-color: var(--bg-slate);
+    color: var(--text-main);
+}
+
+/* --- NAVBAR GÜNCELLEMESİ --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 8%;
+    background-color: var(--primary-dark);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.navbar .logo {
+    color: white;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.nav-links a {
+    margin-left: 25px;
+    text-decoration: none;
+    color: #cbd5e1;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.nav-links a:hover, #nav-profile-link {
+    color: white;
+}
+
+#nav-profile-link {
+    background: rgba(59, 130, 246, 0.15);
+    padding: 8px 18px;
+    border-radius: 30px;
+    border: 1px solid var(--accent-blue);
+}
+
+/* --- PROFİL CONTAINER --- */
+.profile-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2.5rem;
+    max-width: 1300px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+}
+
+/* --- SIDEBAR TEMİZLİĞİ VE SÜSLEME --- */
+.profile-sidebar {
+    background-color: var(--card-white);
+    border-radius: var(--border-radius);
+    padding: 2.5rem 1.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    height: fit-content;
+}
+
+.user-avatar img {
+    border-radius: 50%;
+    border: 3px solid #f1f5f9;
+    padding: 4px;
+    transition: var(--transition);
+}
+
+.sidebar-name {
+    margin-top: 1rem;
+    color: var(--primary-dark);
+    font-size: 1.2rem;
+}
+
+.sidebar-menu {
+    list-style: none; /* Soldaki noktaları siler */
+    margin-top: 2rem;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: var(--text-muted);
+    border-radius: 10px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.sidebar-menu li.active a, .sidebar-menu a:hover:not(.logout) {
+    background-color: #eff6ff;
+    color: var(--accent-blue);
+}
+
+.sidebar-menu a.logout {
+    color: #ef4444;
+    margin-top: 2rem;
+    border: 1px dashed #fecaca;
+}
+
+.sidebar-menu a.logout:hover {
+    background-color: #fef2f2;
+}
+
+/* --- BİLGİ KARTLARI --- */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+}
+
+.info-card {
+    background: var(--card-white);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    border: 1px solid #e2e8f0;
+    transition: var(--transition);
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.06);
+    border-color: var(--accent-blue);
+}
+
+.card-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* --- SİPARİŞ KARTLARI (YENİ TASARIM) --- */
+.order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.order-card {
+    background: var(--card-white);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid var(--primary-dark);
+    transition: var(--transition);
+}
+
+.order-card:hover {
+    transform: translateX(8px);
+    border-color: var(--accent-blue);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.order-no {
+    font-weight: 800;
+    color: var(--primary-dark);
+}
+
+.order-status {
+    font-size: 0.75rem;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+}
+
+.order-status.success { background: var(--success-bg); color: var(--success-text); }
+.order-status.pending { background: var(--pending-bg); color: var(--pending-text); }
+
+.order-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-body p {
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+.order-body strong {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.order-body .tutar {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+}
+
+/* Mobil */
+@media (max-width: 992px) {
+    .profile-container { grid-template-columns: 1fr; }
+}
+
+/* Şifre Bölümü Özel Stilleri */
+.password-card {
+    max-width: 600px;
+}
+
+.password-inputs {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.password-inputs input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    outline: none;
+    transition: var(--transition);
+}
+
+.password-inputs input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.btn-update {
+    background-color: var(--primary-dark);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-update:hover {
+    background-color: var(--accent-blue);
+}
+
+#password-message {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
