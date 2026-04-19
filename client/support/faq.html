@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtlasTech - Sıkça Sorulan Sorular</title>
+    <link rel="stylesheet" href="../home/style.css">
+    <link rel="stylesheet" href="support.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <h2><a href="../home/index.html"><i class="fa-solid fa-microchip"></i> AtlasTech</a></h2>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="İşlemci, ekran kartı, anakart ara...">
+            <button onclick="window.location.href='../products/index.html?arama=' + document.getElementById('searchInput').value"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <div class="user-actions">
+            <a href="../login/index.html"><i class="fa-regular fa-user"></i> Hesabım</a>
+            <a href="../favorites/index.html"><i class="fa-regular fa-heart"></i> Favoriler</a>
+            <a href="#"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+        </div>
+    </header>
+
+    <nav class="category-nav">
+        <ul>
+            <li><a href="../home/index.html">ANA SAYFA</a></li>
+            <li><a href="../home/islemciler.html">İŞLEMCİLER (CPU)</a></li>
+            <li><a href="../home/ekrankartlari.html">EKRAN KARTLARI (GPU)</a></li>
+            <li><a href="../home/anakartlar.html">ANAKARTLAR</a></li>
+            <li><a href="../home/bellekler.html">BELLEKLER (RAM)</a></li>
+            <li><a href="../home/depolama.html">DEPOLAMA (SSD)</a></li>
+            <li><a href="../home/hazir-sistemler.html">HAZIR SİSTEMLER</a></li>
+        </ul>
+    </nav>
+
+    <main class="support-page">
+        <div class="support-container">
+            <h1 class="page-title"><i class="fa-regular fa-circle-question"></i> Sıkça Sorulan Sorular (SSS)</h1>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3>Siparişim ne zaman kargoya verilir?</h3>
+                    <p>Hafta içi saat 15:00'a kadar verdiğiniz donanım siparişleri aynı gün kargoya teslim edilmektedir. Hazır sistem siparişlerinde ise montaj ve test süreçleri nedeniyle kargoya verilme süresi 2-3 iş gününü bulabilmektedir.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Hangi kargo şirketleriyle çalışıyorsunuz?</h3>
+                    <p>Müşterilerimize en hızlı ve güvenli hizmeti sunabilmek adına Yurtiçi Kargo ve Kolay Gelsin ile çalışmaktayız. Teslimat adresinize göre sistem en uygun kargo firmasını otomatik olarak belirler.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Satın aldığım ürünlerin garantisi var mı?</h3>
+                    <p>Evet, AtlasTech üzerinden satın aldığınız tüm bilgisayar bileşenleri ve hazır sistemler, aksi belirtilmedikçe en az 2 yıl boyunca resmi Türkiye distribütörü ve üretici garantisi altındadır.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Hazır sistemlerde parça değişikliği yapabilir miyim?</h3>
+                    <p>Elbette. Hazır sistemlerimizin detay sayfasında bulunan "Özelleştir" butonunu kullanarak bütçenize ve ihtiyaçlarınıza göre işlemci, RAM, ekran kartı ve depolama birimlerini değiştirebilirsiniz.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-columns">
+            <div class="column">
+                <h4>AtlasTech</h4>
+                <p>En yeni bilgisayar parçaları, güvenli alışveriş ve hızlı kargo ile kapınızda.</p>
+            </div>
+            <div class="column">
+                <h4>Müşteri Hizmetleri</h4>
+                <ul>
+                    <li><a href="faq.html">Sıkça Sorulan Sorular (SSS)</a></li>
+                    <li><a href="returns.html">İptal ve İade Koşulları</a></li>
+                </ul>
+            </div>
+            <div class="column">
+                <h4>Bizi Takip Edin</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-discord"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

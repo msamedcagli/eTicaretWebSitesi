@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtlasTech - İptal ve İade Koşulları</title>
+    <link rel="stylesheet" href="../home/style.css">
+    <link rel="stylesheet" href="support.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <h2><a href="../home/index.html"><i class="fa-solid fa-microchip"></i> AtlasTech</a></h2>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="İşlemci, ekran kartı, anakart ara...">
+            <button onclick="window.location.href='../products/index.html?arama=' + document.getElementById('searchInput').value"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <div class="user-actions">
+            <a href="../login/index.html"><i class="fa-regular fa-user"></i> Hesabım</a>
+            <a href="../favorites/index.html"><i class="fa-regular fa-heart"></i> Favoriler</a>
+            <a href="#"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+        </div>
+    </header>
+
+    <nav class="category-nav">
+        <ul>
+            <li><a href="../home/index.html">ANA SAYFA</a></li>
+            <li><a href="../home/islemciler.html">İŞLEMCİLER (CPU)</a></li>
+            <li><a href="../home/ekrankartlari.html">EKRAN KARTLARI (GPU)</a></li>
+            <li><a href="../home/anakartlar.html">ANAKARTLAR</a></li>
+            <li><a href="../home/bellekler.html">BELLEKLER (RAM)</a></li>
+            <li><a href="../home/depolama.html">DEPOLAMA (SSD)</a></li>
+            <li><a href="../home/hazir-sistemler.html">HAZIR SİSTEMLER</a></li>
+        </ul>
+    </nav>
+
+    <main class="support-page">
+        <div class="support-container">
+            <h1 class="page-title"><i class="fa-solid fa-rotate-left"></i> İptal ve İade Koşulları</h1>
+            
+            <div class="policy-content">
+                <h2>1. Sipariş İptali</h2>
+                <p>Siparişinizi, ürün "Kargoya Verildi" statüsüne geçmeden önce "Hesabım > Siparişlerim" menüsü üzerinden doğrudan iptal edebilirsiniz. İptal edilen siparişlerin ücret iadesi, bankanızın işlem süresine bağlı olarak 1-3 iş günü içerisinde ödeme yaptığınız karta yansıtılacaktır.</p>
+
+                <h2>2. Cayma Hakkı ve İade Süresi</h2>
+                <p>Tüketici Kanunu gereğince, satın aldığınız ürünü teslim aldığınız tarihten itibaren <strong>14 gün içerisinde</strong> hiçbir gerekçe göstermeksizin ve kargo ücreti ödemeksizin iade etme hakkına sahipsiniz.</p>
+
+                <h2>3. İade Edilemeyen Ürünler (Önemli!)</h2>
+                <p>Elektronik donanım ve bileşenlerin hassas yapısı gereği aşağıdaki durumlarda iade kabul edilememektedir:</p>
+                <ul>
+                    <li>İşlemcilerde (CPU) pinlerin eğilmesi veya termal macun sürülerek anakarta montaj yapılması.</li>
+                    <li>Orijinal kutusu, güvenlik bandı, ambalajı veya antistatik poşeti açılmış/yırtılmış ürünler.</li>
+                    <li>Sıvı soğutma sistemlerinde montaj jelatinlerinin sökülmüş olması.</li>
+                    <li>Sizin talepleriniz doğrultusunda özel olarak montajı yapılan "Hazır Sistem" kasaları (Sadece arızalı parça değişimi yapılabilir).</li>
+                </ul>
+
+                <h2>4. İade Süreci Nasıl İşler?</h2>
+                <p>İade etmek istediğiniz ürünü orijinal faturası, tüm aksesuarları ve kutu içeriği eksiksiz olacak şekilde paketleyiniz. Müşteri hizmetlerimizden alacağınız "Ücretsiz İade Kargo Kodu" ile ürünü anlaşmalı kargo şubesine teslim etmeniz yeterlidir. Ürün teknik ekibimiz tarafından incelendikten sonra (max. 2 iş günü) iade işleminiz onaylanacaktır.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-columns">
+            <div class="column">
+                <h4>AtlasTech</h4>
+                <p>En yeni bilgisayar parçaları, güvenli alışveriş ve hızlı kargo ile kapınızda.</p>
+            </div>
+            <div class="column">
+                <h4>Müşteri Hizmetleri</h4>
+                <ul>
+                    <li><a href="faq.html">Sıkça Sorulan Sorular (SSS)</a></li>
+                    <li><a href="returns.html">İptal ve İade Koşulları</a></li>
+                </ul>
+            </div>
+            <div class="column">
+                <h4>Bizi Takip Edin</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-discord"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
