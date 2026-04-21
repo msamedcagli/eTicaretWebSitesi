@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AtlasTech - Favorilerim</title>
-    <link rel="stylesheet" href="../home/style.css"> 
-    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="../home/style.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -14,20 +14,20 @@
         <div class="logo">
             <h2><a href="../home/index.html"><i class="fa-solid fa-microchip"></i> AtlasTech</a></h2>
         </div>
-        
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="İşlemci, ekran kartı, anakart ara...">
-            <button onclick="window.location.href='../products/index.html?arama=' + document.getElementById('searchInput').value"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button onclick="window.location.href='../home/index.html?arama=' + document.getElementById('searchInput').value">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
         </div>
-
         <div class="user-actions">
             <a href="../login/index.html"><i class="fa-regular fa-user"></i> Hesabım</a>
-            <a href="index.html" class="active"><i class="fa-regular fa-heart"></i> Favoriler</a>
+            <a href="index.html" class="active"><i class="fa-solid fa-heart"></i> Favoriler</a>
             <a href="#"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
         </div>
     </header>
 
-     <nav class="category-nav">
+    <nav class="category-nav">
         <ul>
             <li><a href="../home/index.html">ANA SAYFA</a></li>
             <li><a href="../home/islemciler.html">İŞLEMCİLER (CPU)</a></li>
@@ -40,13 +40,13 @@
     </nav>
 
     <main class="favorites-page">
-        <div class="favorites-header">
-            <h2 class="section-title"><i class="fa-solid fa-heart" style="color: #38bdf8;"></i> Favori Ürünlerim</h2>
-            <p class="favorites-count" id="favoritesCount">Yükleniyor...</p>
-        </div>
-        
-        <div class="product-grid" id="favoritesGrid">
+        <div class="container">
+            <div class="favorites-header">
+                <h2><i class="fa-solid fa-heart" style="color: #ef4444;"></i> Favori Ürünlerim</h2>
+                <span class="favorites-count" id="favoritesCount">Yükleniyor...</span>
             </div>
+            <div class="favorites-grid" id="favoritesGrid"></div>
+        </div>
     </main>
 
     <footer class="main-footer">
