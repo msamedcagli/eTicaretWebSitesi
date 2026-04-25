@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtlasTech - Favorilerim</title>
+    <link rel="stylesheet" href="../home/style.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <h2><a href="../home/index.html"><i class="fa-solid fa-microchip"></i> AtlasTech</a></h2>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="İşlemci, ekran kartı, anakart ara...">
+            <button onclick="window.location.href='../home/index.html?arama=' + document.getElementById('searchInput').value">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+        <div class="user-actions">
+            <a href="../login/index.html"><i class="fa-regular fa-user"></i> Hesabım</a>
+            <a href="index.html" class="active"><i class="fa-solid fa-heart"></i> Favoriler</a>
+            <a href="#"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+        </div>
+    </header>
+
+    <nav class="category-nav">
+        <ul>
+            <li><a href="../home/index.html">ANA SAYFA</a></li>
+            <li><a href="../home/islemciler.html">İŞLEMCİLER (CPU)</a></li>
+            <li><a href="../home/ekrankartlari.html">EKRAN KARTLARI (GPU)</a></li>
+            <li><a href="../home/anakartlar.html">ANAKARTLAR</a></li>
+            <li><a href="../home/bellekler.html">BELLEKLER (RAM)</a></li>
+            <li><a href="../home/depolama.html">DEPOLAMA (SSD)</a></li>
+            <li><a href="../home/hazir-sistemler.html">HAZIR SİSTEMLER</a></li>
+        </ul>
+    </nav>
+
+    <main class="favorites-page">
+        <div class="container">
+            <div class="favorites-header">
+                <h2><i class="fa-solid fa-heart" style="color: #ef4444;"></i> Favori Ürünlerim</h2>
+                <span class="favorites-count" id="favoritesCount">Yükleniyor...</span>
+            </div>
+            <div class="favorites-grid" id="favoritesGrid"></div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-columns">
+            <div class="column">
+                <h4>AtlasTech</h4>
+                <p>En yeni bilgisayar parçaları, güvenli alışveriş ve hızlı kargo ile kapınızda.</p>
+            </div>
+            <div class="column">
+                <h4>Müşteri Hizmetleri</h4>
+                <ul>
+                    <li><a href="../support/faq.html">Sıkça Sorulan Sorular (SSS)</a></li>
+                    <li><a href="../support/returns.html">İptal ve İade Koşulları</a></li>
+                </ul>
+            </div>
+            <div class="column">
+                <h4>Bizi Takip Edin</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-discord"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

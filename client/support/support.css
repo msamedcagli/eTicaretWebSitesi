@@ -1,0 +1,82 @@
+/* Sayfa Genel Yapısı */
+.support-page {
+    background-color: #f8fafc;
+    padding: 60px 20px;
+    min-height: 60vh;
+}
+
+/* İçeriğin bulunduğu beyaz kart */
+.support-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 50px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+/* Başlık */
+.page-title {
+    font-size: 28px;
+    color: #0f172a;
+    margin-bottom: 40px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #38bdf8;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.page-title i { color: #38bdf8; }
+
+/* --- SSS SAYFASI TASARIMI --- */
+.faq-list { display: flex; flex-direction: column; gap: 25px; }
+
+.faq-item h3 {
+    font-size: 18px;
+    color: #0f172a;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.faq-item h3::before {
+    content: "Q.";
+    color: #38bdf8;
+    font-weight: 800;
+}
+.faq-item p {
+    font-size: 15px;
+    color: #475569;
+    line-height: 1.7;
+    padding-left: 28px; /* Soru başlığının altına hizalamak için */
+}
+
+/* --- İPTAL İADE SAYFASI TASARIMI --- */
+.policy-content h2 {
+    font-size: 20px;
+    color: #1e293b;
+    margin-top: 35px;
+    margin-bottom: 15px;
+}
+.policy-content h2:first-child { margin-top: 0; }
+
+.policy-content p {
+    font-size: 15px;
+    color: #475569;
+    line-height: 1.7;
+    margin-bottom: 15px;
+}
+.policy-content strong { color: #0f172a; }
+
+.policy-content ul {
+    list-style-type: disc;
+    padding-left: 25px;
+    margin-bottom: 20px;
+}
+.policy-content ul li {
+    font-size: 15px;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
