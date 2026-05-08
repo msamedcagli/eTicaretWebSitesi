@@ -1,76 +1,179 @@
-// --- ALP'İN SLIDER KODLARI (Buna dokunmuyoruz) ---
-let currentSlideIndex = 0;
-const slides = document.querySelectorAll('.slide');
+// --- GENEL ÜRÜN YÜKLEYİCİ VE YÖNLENDİRİCİ ---
+document.addEventListener("DOMContentLoaded", async () => {
+    const productGrid = document.querySelector(".product-grid");
+    if (!productGrid) return;
 
-function changeSlide(direction) {
-    if (slides.length === 0) return;
-    slides[currentSlideIndex].classList.remove('active');
-    currentSlideIndex += direction;
-    if (currentSlideIndex >= slides.length) {
-        currentSlideIndex = 0;
-    } else if (currentSlideIndex < 0) {
-        currentSlideIndex = slides.length - 1;
+    // 1. Kategori Belirleme (Sayfa başlığına göre)
+    let category = "";
+    const pageTitle = document.title.toLowerCase();
+    
+    if (pageTitle.includes("işlemci")) category = "İşlemciler";
+    else if (pageTitle.includes("ekran kartı")) category = "Ekran Kartları";
+    else if (pageTitle.includes("anakart")) category = "Anakartlar";
+    else if (pageTitle.includes("bellek") || pageTitle.includes("ram")) category = "RAM";
+    else if (pageTitle.includes("depolama") || pageTitle.includes("ssd")) category = "SSD";
+    else if (pageTitle.includes("hazır sistem")) category = "Hazır Sistem";
+    
+    // 2. API URL'sini Belirle
+    const isHomePage = window.location.pathname.endsWith("index.html") || window.location.pathname.endsWith("/");
+    const url = isHomePage 
+        ? "http://localhost:5000/api/products" 
+        : `http://localhost:5000/api/products/category/${encodeURIComponent(category)}`;
+
+    try {
+        const response = await fetch(url);
+        const products = await response.json();
+
+        if (response.ok) {
+            productGrid.innerHTML = ""; // Mevcut statik ürünleri temizle
+            
+            // Eğer ana sayfadaysak sadece ilk 8 ürünü göster (veya hepsi kalsın)
+            const displayProducts = isHomePage ? products.slice(0, 8) : products;
+
+            displayProducts.forEach(product => {
+                const productCard = document.createElement("div");
+                productCard.className = "product-card";
+                productCard.style.cursor = "pointer";
+                
+                const badge = product.Stock <= 0 ? '<span class="badge">Tükendi</span>' : '';
+                const finalImgUrl = product.ImageUrl.startsWith('/assets') ? `..${product.ImageUrl}` : product.ImageUrl;
+                
+                productCard.innerHTML = `
+                    ${badge}
+                    <img src="${finalImgUrl}" alt="${product.Name}">
+                    <h4>${product.Name}</h4>
+                    <p class="category">${product.Category}</p>
+                    <p class="price">${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(product.Price)}</p>
+                    <button class="add-to-cart ${product.Stock <= 0 ? 'disabled' : ''}" ${product.Stock <= 0 ? 'disabled' : ''}>
+                        ${product.Stock <= 0 ? 'Stokta Yok' : '<i class="fa-solid fa-cart-plus"></i> Sepete Ekle'}
+                    </button>
+                `;
+                
+                // Detay sayfasına yönlendirme (ID üzerinden)
+                productCard.addEventListener("click", (e) => {
+                    if (e.target.closest('.add-to-cart')) return;
+                    window.location.href = `product-detail.html?id=${product.Id}`;
+                });
+                
+                productGrid.appendChild(productCard);
+            });
+        }
+    } catch (error) {
+        console.error("Ürünler yüklenirken hata:", error);
     }
-    slides[currentSlideIndex].classList.add('active');
+});
+
+// --- ÇEREZ (COOKIE) YARDIMCILARI ---
+function setCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 
-function autoSlide() {
-    changeSlide(1);
+function getCookie(name) {
+    let nameEQ = name + "=";
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
 }
-setInterval(autoSlide, 5000);
 
-// --- MUSTAFA'NIN YENİ ÜRÜN YÖNLENDİRME KODLARI ---
+function eraseCookie(name) {
+    document.cookie = name + '=; Max-Age=-99999999; path=/';
+}
 
+// --- PROFİL VE ERİŞİM KONTROLÜ ---
 document.addEventListener("DOMContentLoaded", function() {
-    const cards = document.querySelectorAll(".product-card");
+    const kullaniciVerisi = getCookie('userSession') || localStorage.getItem('kullaniciBilgileri');
+    const userActions = document.querySelector('.user-actions');
+    
+    if (userActions) {
+        if (kullaniciVerisi) {
+            const data = JSON.parse(kullaniciVerisi);
+            // GİRİŞ YAPILMIŞSA: Profil, Favoriler ve Sepeti Göster
+            userActions.innerHTML = `
+                <a href="../profile/index.html"><i class="fa-regular fa-user"></i> Profil</a>
+                <a href="../favorites/index.html"><i class="fa-regular fa-heart"></i> Favoriler</a>
+                <a href="#"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+            `;
+        } else {
+            // GİRİŞ YAPILMAMIŞSA: Sadece Giriş Yap Butonunu Göster
+            userActions.innerHTML = `
+                <a href="../login/index.html" class="login-btn-header"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</a>
+            `;
+        }
+    }
 
-    cards.forEach(card => {
-        card.style.cursor = "pointer";
-        
-        card.addEventListener("click", function(e) {
-            // Eğer "Sepete Ekle" butonuna basıldıysa başka sayfaya gitme
-            if (e.target.closest('.add-to-cart')) return; 
-
-            // Kartın içindeki bilgileri alıyoruz
-            const title = card.querySelector("h4").innerText;
-            const price = card.querySelector(".price").innerText;
-            const img = card.querySelector("img").src;
-            const category = card.querySelector(".category").innerText;
-            
-            // Stok durumunu badge üzerinden kontrol et
-            const isOutOfStock = card.querySelector('.badge') ? "yok" : "var";
-
-            // BİLGİLERİ URL'YE KOYUP YENİ SAYFAYA GİDİYORUZ
-            // Trendyol mantığı tam olarak budur:
-            const url = `product-detail.html?title=${encodeURIComponent(title)}&price=${encodeURIComponent(price)}&img=${encodeURIComponent(img)}&cat=${encodeURIComponent(category)}&stock=${isOutOfStock}`;
-            
-            window.location.href = url; 
-        });
+    // Sepete Ekleme Butonları İçin Global Kontrol
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.add-to-cart')) {
+            const loggedIn = getCookie('userSession') || localStorage.getItem('kullaniciBilgileri');
+            if (!loggedIn) {
+                e.preventDefault();
+                e.stopPropagation();
+                showToast("Sepete ürün eklemek için giriş yapmalısınız!", "error");
+            }
+        }
     });
 });
 
-// --- MUSTAFA'NIN PROFİL ENTEGRASYONU ---
-document.addEventListener("DOMContentLoaded", function() {
-    const kullaniciVerisi = localStorage.getItem('kullaniciBilgileri');
-
-    if (kullaniciVerisi) {
-        // "Giriş Yap" yazan o linki buluyoruz
-        const authLink = document.querySelector('a[href*="login"]'); 
-        
-        if (authLink) {
-            // 1. Yazıyı sadece "Profil" yap ve simgesini koy
-            authLink.innerHTML = `<i class="fa-regular fa-user"></i> Profil`;
-            
-            // 2. Tıklayınca senin hazırladığın profil sayfasına gitsin
-            authLink.href = "../profile/index.html";
-
-            // 3. Arkadaşının yazdığı eski tıklama olaylarını (click event) pasif yapalım
-            // Bu satır sayesinde üzerine tıklandığında eski "Çıkış Yap" kodları çalışmaz.
-            authLink.addEventListener("click", function(e) {
-                e.stopPropagation(); 
-            }, true);
-        }
+// --- TOAST MESAJ SİSTEMİ ---
+function showToast(message, type = "success") {
+    let toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toast-container';
+        toastContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+        document.body.appendChild(toastContainer);
     }
-});
-// Favori ve Sayaç kodlarını buraya koymuyoruz çünkü onlar artık product-detail.html'e özel olacak.
-// Ama istersen genel kalsın dersen aşağıya ekleyebilirsin.
+
+    const toast = document.createElement("div");
+    toast.style.cssText = `
+        background: ${type === 'error' ? '#ef4444' : '#10b981'};
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease-out;
+        font-family: 'Outfit', sans-serif;
+        font-weight: 600;
+    `;
+    toast.textContent = message;
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = "slideOut 0.3s ease-in forwards";
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Animasyonlar
+if (!document.getElementById('toast-styles')) {
+    const style = document.createElement('style');
+    style.id = 'toast-styles';
+    style.textContent = `
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+    `;
+    document.head.appendChild(style);
+}
+
+// --- SLIDER (Sadece Ana Sayfada Varsa Çalışır) ---
+let currentSlideIndex = 0;
+const slides = document.querySelectorAll('.slide');
+if (slides.length > 0) {
+    function changeSlide(direction) {
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = (currentSlideIndex + direction + slides.length) % slides.length;
+        slides[currentSlideIndex].classList.add('active');
+    }
+    setInterval(() => changeSlide(1), 5000);
+}

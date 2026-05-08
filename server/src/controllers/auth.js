@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const { sql } = require('../data/db'); // db.js'den sql objesini alıyoruz
+const { sql, connectDB } = require('../data/db');
 
 exports.register = async (req, res) => {
     const { email, phone, password, kvkk } = req.body;
@@ -9,8 +9,10 @@ exports.register = async (req, res) => {
     }
 
     try {
+        const pool = await connectDB();
+        
         // 1. Kullanıcı zaten var mı kontrol et?
-        const checkUser = await new sql.Request()
+        const checkUser = await pool.request()
             .input('email', sql.NVarChar, email)
             .query('SELECT * FROM Users WHERE email = @email');
 
@@ -22,8 +24,8 @@ exports.register = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // 3. Veritabanına kaydet (id otomatik artıyor, eklemeye gerek yok)
-        await new sql.Request()
+        // 3. Veritabanına kaydet
+        await pool.request()
             .input('email', sql.NVarChar, email)
             .input('phone', sql.NVarChar, phone)
             .input('password', sql.NVarChar, hashedPassword)
@@ -45,12 +47,14 @@ exports.login = async (req, res) => {
     }
 
     try {
+        const pool = await connectDB();
+        
         // 1. Kullanıcıyı bul
-        const result = await new sql.Request()
+        const result = await pool.request()
             .input('email', sql.NVarChar, email)
             .query('SELECT * FROM Users WHERE email = @email');
 
-        const user = result.recordset[0]; // İlk eşleşen kullanıcıyı al
+        const user = result.recordset[0];
 
         if (!user) {
             return res.status(401).json({ error: 'Girdiğiniz E-posta veya Parola hatalı.' });
@@ -69,19 +73,19 @@ exports.login = async (req, res) => {
         res.status(500).json({ error: 'Sunucu hatası oluştu.' });
     }
 };
-// Profil bilgilerini getiren fonksiyon
-// controllers/auth.js
+
 exports.getProfile = async (req, res) => {
     try {
-        const { sql } = require('../data/db');
-        const userEmail = req.query.email; // Frontend'den gelen e-posta
+        const pool = await connectDB();
+        const userEmail = req.query.email;
 
         if (!userEmail) {
             return res.status(400).json({ message: "E-posta adresi gerekli" });
         }
 
-        // Veritabanından o e-postaya ait tüm bilgileri çekiyoruz
-        const result = await sql.query`SELECT Name, Email, Phone, CreatedAt FROM Users WHERE Email = ${userEmail}`;
+        const result = await pool.request()
+            .input('email', sql.NVarChar, userEmail)
+            .query('SELECT email as Email, phone as Phone, createdAt as CreatedAt FROM Users WHERE email = @email');
         
         if (result.recordset.length > 0) {
             res.json(result.recordset[0]);

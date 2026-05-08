@@ -1,3 +1,14 @@
+// Cookie Helper
+function setCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+
 // Tab Switching Logic
 const tabLogin = document.getElementById('tabLogin');
 const tabRegister = document.getElementById('tabRegister');
@@ -47,7 +58,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     submitBtn.disabled = true;
 
     try {
-        const response = await fetch('http://localhost:3000/api/auth/register', {
+        const response = await fetch('http://localhost:5000/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, phone, password, kvkk })
@@ -84,7 +95,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     submitBtn.disabled = true;
 
     try {
-        const response = await fetch('http://localhost:3000/api/auth/login', {
+        const response = await fetch('http://localhost:5000/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -92,10 +103,12 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            showMessage('loginMessage', 'Giriş Başarılı! Yönlendiriliyorsunuz...', 'success');
+            // 1. Arka plandan (backend) gelen bilgileri tarayıcının kasasına (localStorage) ve Çerezlere (Cookie) kaydet
+            const userData = JSON.stringify(data);
+            localStorage.setItem('kullaniciBilgileri', userData);
+            setCookie('userSession', userData, 7); // 7 Günlük Çerez
 
-            // 1. Arka plandan (backend) gelen bilgileri tarayıcının kasasına (localStorage) şifreleyerek kaydet
-            localStorage.setItem('kullaniciBilgileri', JSON.stringify(data));
+            showMessage('loginMessage', 'Giriş Başarılı! Yönlendiriliyorsunuz...', 'success');
 
             // 2. Kullanıcı "Giriş Başarılı" yazısını okuyabilsin diye 1.5 saniye bekleyip ana sayfaya yönlendir
             setTimeout(() => {
