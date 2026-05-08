@@ -12,12 +12,14 @@ async function connectDB() {
     if (pool && pool.connected) return pool;
 
     try {
+        console.log('📡 Veritabanına bağlanılıyor...');
         pool = await new sql.ConnectionPool(config).connect();
         console.log('🚀 SQL Server bağlantısı başarıyla kuruldu!');
         return pool;
     } catch (err) {
         pool = null;
-        console.error('❌ Veritabanı bağlantı hatası:', err);
+        console.error('❌ Veritabanı bağlantı hatası (Detay):', err.message);
+        console.error('Bağlantı dizesi:', config.connectionString);
         throw err;
     }
 }

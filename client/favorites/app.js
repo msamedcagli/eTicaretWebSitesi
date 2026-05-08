@@ -1,7 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     const user = localStorage.getItem('kullaniciBilgileri');
+    const authLink = document.getElementById('header-profile-link');
 
-    if (!user) {
+    if (user) {
+        const data = JSON.parse(user);
+        // Header'daki Hesabım linkini güncelle
+        authLink.innerHTML = `<i class="fa-regular fa-user"></i> ${data.user.name || 'Hesabım'}`;
+        authLink.href = "../profile/index.html";
+    } else {
         showToast("Favorilerinizi görmek için giriş yapmalısınız!", "error");
         setTimeout(() => {
             window.location.href = "../login/index.html";

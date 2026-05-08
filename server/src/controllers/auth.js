@@ -4,8 +4,10 @@ const { sql, connectDB } = require('../data/db');
 
 exports.register = async (req, res) => {
     const { email, phone, password, kvkk } = req.body;
+    console.log(`Kayıt işlemi başlatıldı: ${email}`);
 
     if (!email || !phone || !password || !kvkk) {
+        console.warn(`Kayıt Hatası: Eksik bilgi girildi (${email})`);
         return res.status(400).json({ error: 'Eksik bilgi girdiniz.' });
     }
 
@@ -18,6 +20,7 @@ exports.register = async (req, res) => {
             .query('SELECT * FROM Users WHERE email = @email');
 
         if (checkUser.recordset.length > 0) {
+            console.warn(`Kayıt Hatası: E-posta zaten mevcut (${email})`);
             return res.status(400).json({ error: 'Bu e-posta adresi zaten mevcut.' });
         }
 
@@ -33,17 +36,20 @@ exports.register = async (req, res) => {
             .input('kvkk', sql.Bit, kvkk ? 1 : 0)
             .query('INSERT INTO Users (email, phone, password, kvkk) VALUES (@email, @phone, @password, @kvkk)');
 
+        console.log(`Yeni kullanıcı kaydedildi: ${email}`);
         res.status(201).json({ message: 'Hesap başarıyla oluşturuldu.' });
     } catch (err) {
-        console.error('Kayıt Hatası:', err);
+        console.error('Kayıt Hatası (Detaylı):', err);
         res.status(500).json({ error: 'Sunucu hatası oluştu.' });
     }
 };
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;
+    console.log(`Giriş denemesi: ${email}`);
 
     if (!email || !password) {
+        console.warn(`Giriş Hatası: Eksik bilgi (${email})`);
         return res.status(400).json({ error: 'E-posta ve parola zorunludur.' });
     }
 
@@ -58,6 +64,7 @@ exports.login = async (req, res) => {
         const user = result.recordset[0];
 
         if (!user) {
+            console.warn(`Giriş Hatası: Kullanıcı bulunamadı (${email})`);
             return res.status(401).json({ error: 'Girdiğiniz E-posta veya Parola hatalı.' });
         }
 
@@ -65,22 +72,27 @@ exports.login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
+            console.warn(`Giriş Hatası: Yanlış parola (${email})`);
             return res.status(401).json({ error: 'Girdiğiniz E-posta veya Parola hatalı.' });
         }
 
+        console.log(`Giriş başarılı: ${email}`);
         res.status(200).json({ message: 'Başarıyla giriş yapıldı.', user: { email: user.email } });
     } catch (err) {
-        console.error('Giriş Hatası:', err);
+        console.error('Giriş Hatası (Detaylı):', err);
         res.status(500).json({ error: 'Sunucu hatası oluştu.' });
     }
 };
 
 exports.getProfile = async (req, res) => {
+    const userEmail = req.query.email;
+    console.log(`Profil çekme isteği: ${userEmail}`);
+
     try {
         const pool = await connectDB();
-        const userEmail = req.query.email;
 
         if (!userEmail) {
+            console.warn(`Profil Hatası: E-posta eksik`);
             return res.status(400).json({ message: "E-posta adresi gerekli" });
         }
 
@@ -89,12 +101,14 @@ exports.getProfile = async (req, res) => {
             .query('SELECT email as Email, phone as Phone, createdAt as CreatedAt FROM Users WHERE email = @email');
         
         if (result.recordset.length > 0) {
+            console.log(`Profil başarıyla çekildi: ${userEmail}`);
             res.json(result.recordset[0]);
         } else {
+            console.warn(`Profil Hatası: Kullanıcı bulunamadı (${userEmail})`);
             res.status(404).json({ message: "Kullanıcı bulunamadı" });
         }
     } catch (err) {
-        console.error("Profil çekme hatası:", err);
+        console.error("Profil Çekme Hatası (Detaylı):", err);
         res.status(500).json({ message: "Sunucu hatası" });
     }
 };
