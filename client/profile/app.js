@@ -2,7 +2,6 @@
 (function checkAuth() {
     const user = localStorage.getItem('kullaniciBilgileri');
     if (!user) {
-        // Eğer giriş verisi yoksa, içeri girmesine izin verme!
         alert("Bu sayfayı görüntülemek için giriş yapmalısınız.");
         window.location.replace('../login/index.html');
     }
@@ -14,11 +13,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (kullaniciVerisi) {
         const data = JSON.parse(kullaniciVerisi);
-        // Giriş yapılmışsa Hesabım yazsın
         authLink.innerHTML = `<i class="fa-regular fa-user"></i> ${data.user.name || 'Hesabım'}`;
         authLink.href = "../profile/index.html";
         
-        // İlk yüklemede local storage'dan verileri bas
         if (data.user.email) document.getElementById('profile-email').innerText = data.user.email;
         if (data.user.phone) document.getElementById('profile-phone').innerText = data.user.phone;
     } else {
@@ -26,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function() {
         authLink.href = "../login/index.html";
     }
 
-    // Backend'den güncel verileri çek
     fetchProfileData();
 });
 
@@ -38,7 +34,6 @@ async function fetchProfileData() {
         const userData = JSON.parse(userString);
         const userEmail = userData.user.email;
 
-        // Portu 5000 yapıyoruz ve email parametresini ekliyoruz
         const response = await fetch(`http://localhost:5000/api/auth/profile?email=${encodeURIComponent(userEmail)}`); 
         
         if (!response.ok) {
@@ -47,7 +42,6 @@ async function fetchProfileData() {
 
         const user = await response.json();
 
-        // HTML alanlarını gerçek verilerle doldur (Backend'den gelen büyük harf uyumu: user.Email)
         if (user.Email) document.getElementById('profile-email').innerText = user.Email;
         if (user.Phone) document.getElementById('profile-phone').innerText = user.Phone;
         
@@ -60,7 +54,6 @@ async function fetchProfileData() {
             document.getElementById('profile-date').innerText = date;
         }
 
-        // Header'daki ismi de güncelle
         const authLink = document.getElementById('header-profile-link');
         if (authLink) {
             authLink.innerHTML = `<i class="fa-regular fa-user"></i> ${user.name || 'Hesabım'}`;
@@ -68,14 +61,13 @@ async function fetchProfileData() {
 
     } catch (error) {
         console.error('Profil verisi çekme hatası:', error);
-        // Hata durumunda mesajları güncelle
         document.getElementById('profile-email').innerText = "Bir hata oluştu";
         document.getElementById('profile-phone').innerText = "Bir hata oluştu";
         document.getElementById('profile-date').innerText = "Bir hata oluştu";
     }
 }
 
-// Çerez (Cookie) Yardımcıları
+// Çerez Yardımcıları
 function setCookie(name, value, days) {
     let expires = "";
     if (days) {
@@ -90,33 +82,66 @@ function eraseCookie(name) {
     document.cookie = name + '=; Max-Age=-99999999; path=/';
 }
 
-// Çıkış Yap Butonu Fonksiyonu
+// TOAST SİSTEMİ
+function showToast(message, type = "success") {
+    let toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toast-container';
+        toastContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+        document.body.appendChild(toastContainer);
+    }
+
+    const toast = document.createElement("div");
+    toast.style.cssText = `
+        background: ${type === 'error' ? '#ef4444' : '#10b981'};
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease-out;
+        font-family: 'Outfit', sans-serif;
+        font-weight: 600;
+    `;
+    toast.textContent = message;
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = "slideOut 0.3s ease-in forwards";
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+if (!document.getElementById('toast-styles')) {
+    const style = document.createElement('style');
+    style.id = 'toast-styles';
+    style.textContent = `
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+    `;
+    document.head.appendChild(style);
+}
+
+// Çıkış Yap
 document.getElementById('logout-btn').addEventListener('click', (e) => {
     e.preventDefault();
     if(confirm('Çıkış yapmak istediğinize emin misiniz?')) {
-        // 1. Çerezlere çıkış yapıldığı bilgisini kaydet
         setCookie('authStatus', 'loggedOut', 1);
-        
-        // 2. Mevcut oturum çerezini ve yerel verileri temizle
         eraseCookie('userSession');
         localStorage.clear(); 
         sessionStorage.clear();
-        
-        // 3. Kullanıcıyı ANA SAYFAYA postala
         window.location.replace('../home/index.html'); 
     }
 });
 
-// Şifre Değiştirme Formu
+// Şifre Değiştirme
 document.getElementById('change-password-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
     const currentPassword = document.getElementById('current-password').value;
     const newPassword = document.getElementById('new-password').value;
     const userString = localStorage.getItem('kullaniciBilgileri');
-    
     if (!userString) return;
-    
     const email = JSON.parse(userString).user.email;
 
     try {
@@ -125,19 +150,15 @@ document.getElementById('change-password-form').addEventListener('submit', async
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, currentPassword, newPassword })
         });
-
         const result = await response.json();
-        const messageDiv = document.getElementById('password-message');
-
         if (response.ok) {
-            messageDiv.style.color = "#166534";
-            messageDiv.innerText = "Şifreniz başarıyla güncellendi!";
+            showToast("Şifreniz başarıyla güncellendi!", "success");
             e.target.reset(); 
         } else {
-            messageDiv.style.color = "#ef4444";
-            messageDiv.innerText = result.message || "Bir hata oluştu.";
+            showToast(result.message || "Bir hata oluştu.", "error");
         }
     } catch (error) {
-        console.error("Şifre değiştirme hatası:", error);
+        console.error("Şifre değiştirme fetch hatası:", error);
+        showToast("Sunucuya bağlanılamadı.", "error");
     }
 });

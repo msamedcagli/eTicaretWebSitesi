@@ -9,4 +9,7 @@ router.post('/login', authController.login);
 // YENİ: Profil bilgilerini getirme rotası
 router.get('/profile', authController.getProfile); 
 
+// Şifre değiştirme rotası
+router.post('/change-password', authController.changePassword);
+
 module.exports = router;

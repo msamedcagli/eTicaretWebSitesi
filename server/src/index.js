@@ -19,6 +19,12 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+// Log Middleware (Hata ayıklama için)
+app.use((req, res, next) => {
+    console.log(`${new Date().toLocaleTimeString()} - [${req.method}] ${req.path}`);
+    next();
+});
+
 // API Yönlendirmeleri
 app.use('/api/auth', authRoutes);
 app.use('/api/favorites', favoriteRoutes); 
