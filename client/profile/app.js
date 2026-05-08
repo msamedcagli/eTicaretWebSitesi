@@ -7,40 +7,39 @@
         window.location.replace('../login/index.html');
     }
 })();
+
 document.addEventListener("DOMContentLoaded", function() {
     const kullaniciVerisi = localStorage.getItem('kullaniciBilgileri');
-    const authLink = document.querySelector('a[href*="login"]'); 
+    const authLink = document.getElementById('header-profile-link'); 
 
     if (kullaniciVerisi) {
-        // Giriş yapılmışsa Profil yazsın
-        authLink.innerHTML = `<i class="fa-regular fa-user"></i> Profil`;
+        const data = JSON.parse(kullaniciVerisi);
+        // Giriş yapılmışsa Hesabım yazsın
+        authLink.innerHTML = `<i class="fa-regular fa-user"></i> ${data.user.name || 'Hesabım'}`;
         authLink.href = "../profile/index.html";
+        
+        // İlk yüklemede local storage'dan verileri bas
+        if (data.user.email) document.getElementById('profile-email').innerText = data.user.email;
+        if (data.user.phone) document.getElementById('profile-phone').innerText = data.user.phone;
     } else {
-        // Giriş yapılmamışsa Giriş Yap yazsın
         authLink.innerHTML = `<i class="fa-regular fa-user"></i> Giriş Yap`;
         authLink.href = "../login/index.html";
     }
 
-    const data = JSON.parse(kullaniciVerisi);
-    // data.user nesnesinin içindeki bilgileri HTML'e basalım
-    document.getElementById('profile-name').innerText = data.user.name || "Mustafa Selvitop";
-    document.getElementById('profile-email').innerText = data.user.email;
-    
-    // Eğer veritabanında telefon ve tarih varsa onları da ekleyebilirsin
-    if (data.user.phone) {
-        document.getElementById('profile-phone').innerText = data.user.phone;
-    }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
+    // Backend'den güncel verileri çek
     fetchProfileData();
 });
 
 async function fetchProfileData() {
     try {
-        // Backend'deki profil endpoint'ine istek at
-        // Not: Gerçek projede buraya giriş yapmış kullanıcının ID'si gönderilir
-        const response = await fetch('http://localhost:3000/api/auth/profile'); 
+        const userString = localStorage.getItem('kullaniciBilgileri');
+        if (!userString) return;
+        
+        const userData = JSON.parse(userString);
+        const userEmail = userData.user.email;
+
+        // Portu 5000 yapıyoruz ve email parametresini ekliyoruz
+        const response = await fetch(`http://localhost:5000/api/auth/profile?email=${encodeURIComponent(userEmail)}`); 
         
         if (!response.ok) {
             throw new Error('Profil bilgileri alınamadı');
@@ -48,49 +47,80 @@ async function fetchProfileData() {
 
         const user = await response.json();
 
-        // HTML'deki "Yükleniyor..." alanlarını gerçek verilerle doldur
-        document.getElementById('profile-name').innerText = user.name || 'İsim Belirtilmemiş';
-        document.getElementById('sidebar-name').innerText = user.name || 'İsim Belirtilmemiş';
-        document.getElementById('profile-email').innerText = user.email;
+        // HTML alanlarını gerçek verilerle doldur (Backend'den gelen büyük harf uyumu: user.Email)
+        if (user.Email) document.getElementById('profile-email').innerText = user.Email;
+        if (user.Phone) document.getElementById('profile-phone').innerText = user.Phone;
         
-        // Eğer telefon ve tarih veritabanında varsa onları da güncelle
-        if(user.phone) document.getElementById('profile-phone').innerText = user.phone;
-        if(user.createdAt) {
-            const date = new Date(user.createdAt).toLocaleDateString('tr-TR');
+        if (user.CreatedAt) {
+            const date = new Date(user.CreatedAt).toLocaleDateString('tr-TR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
             document.getElementById('profile-date').innerText = date;
         }
 
-        // Profil resmini isme göre güncelle (UI Avatars kullanarak)
-        const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random&color=fff&size=150`;
-        document.getElementById('profile-image').src = avatarUrl;
+        // Header'daki ismi de güncelle
+        const authLink = document.getElementById('header-profile-link');
+        if (authLink) {
+            authLink.innerHTML = `<i class="fa-regular fa-user"></i> ${user.name || 'Hesabım'}`;
+        }
 
     } catch (error) {
-        console.error('Hata:', error);
-        document.getElementById('profile-name').innerText = "Hata oluştu!";
+        console.error('Profil verisi çekme hatası:', error);
+        // Hata durumunda mesajları güncelle
+        document.getElementById('profile-email').innerText = "Bir hata oluştu";
+        document.getElementById('profile-phone').innerText = "Bir hata oluştu";
+        document.getElementById('profile-date').innerText = "Bir hata oluştu";
     }
+}
+
+// Çerez (Cookie) Yardımcıları
+function setCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+
+function eraseCookie(name) {
+    document.cookie = name + '=; Max-Age=-99999999; path=/';
 }
 
 // Çıkış Yap Butonu Fonksiyonu
 document.getElementById('logout-btn').addEventListener('click', (e) => {
     e.preventDefault();
     if(confirm('Çıkış yapmak istediğinize emin misiniz?')) {
-        // 1. Tüm yerel verileri temizle
-        localStorage.clear(); 
-        sessionStorage.clear(); // Varsa session verilerini de sil
+        // 1. Çerezlere çıkış yapıldığı bilgisini kaydet
+        setCookie('authStatus', 'loggedOut', 1);
         
-        // 2. Kullanıcıyı giriş sayfasına postala
-        window.location.replace('../login/index.html'); 
+        // 2. Mevcut oturum çerezini ve yerel verileri temizle
+        eraseCookie('userSession');
+        localStorage.clear(); 
+        sessionStorage.clear();
+        
+        // 3. Kullanıcıyı ANA SAYFAYA postala
+        window.location.replace('../home/index.html'); 
     }
 });
+
+// Şifre Değiştirme Formu
 document.getElementById('change-password-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const currentPassword = document.getElementById('current-password').value;
     const newPassword = document.getElementById('new-password').value;
-    const email = JSON.parse(localStorage.getItem('kullaniciBilgileri')).user.email;
+    const userString = localStorage.getItem('kullaniciBilgileri');
+    
+    if (!userString) return;
+    
+    const email = JSON.parse(userString).user.email;
 
     try {
-        const response = await fetch('http://localhost:3000/api/auth/change-password', {
+        const response = await fetch('http://localhost:5000/api/auth/change-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, currentPassword, newPassword })
@@ -100,11 +130,11 @@ document.getElementById('change-password-form').addEventListener('submit', async
         const messageDiv = document.getElementById('password-message');
 
         if (response.ok) {
-            messageDiv.style.color = "green";
+            messageDiv.style.color = "#166534";
             messageDiv.innerText = "Şifreniz başarıyla güncellendi!";
-            e.target.reset(); // Formu temizle
+            e.target.reset(); 
         } else {
-            messageDiv.style.color = "red";
+            messageDiv.style.color = "#ef4444";
             messageDiv.innerText = result.message || "Bir hata oluştu.";
         }
     } catch (error) {
