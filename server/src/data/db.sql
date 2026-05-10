@@ -38,10 +38,10 @@ CREATE TABLE Products (
 -- Ürün Eklendi
 INSERT INTO Products (Name, Description, Price, Stock, Category, ImageUrl)
 VALUES 
-('Intel Core i9-14900K İşlemci', 'AtlasTech güvencesiyle en yüksek performans testlerinden geçmiş 24 çekirdekli işlemci.', 22500.00, 15, 'İşlemciler', 'https://via.placeholder.com/500?text=Intel+i9'),
-('NVIDIA GeForce RTX 4090', 'Oyun ve render için rakipsiz ekran kartı. 24GB GDDR6X.', 75999.00, 5, 'Ekran Kartları', 'https://via.placeholder.com/500?text=RTX+4090'),
-('AMD Ryzen 7 7800X3D', 'Oyun performansında zirve. 8 Çekirdek, 3D V-Cache.', 14200.00, 20, 'İşlemciler', 'https://via.placeholder.com/500?text=Ryzen+7'),
-('ASUS ROG Strix Z790-E Anakart', 'DDR5 destekli, üst düzey oyuncu anakartı.', 18500.00, 10, 'Anakartlar', 'https://via.placeholder.com/500?text=ASUS+ROG');
+('Intel Core i9-14900K İşlemci', 'AtlasTech güvencesiyle en yüksek performans testlerinden geçmiş 24 çekirdekli işlemci.', 22500.00, 15, 'İşlemciler', '/assets/img/products/Islemciler/IntelCorei9-13900KS.jpg'),
+('NVIDIA GeForce RTX 4090', 'Oyun ve render için rakipsiz ekran kartı. 24GB GDDR6X.', 75999.00, 5, 'Ekran Kartları', '/assets/img/products/EkranKartlari/ASUSROGStrixRTX4080.jpg'),
+('AMD Ryzen 7 7800X3D', 'Oyun performansında zirve. 8 Çekirdek, 3D V-Cache.', 14200.00, 20, 'İşlemciler', '/assets/img/products/Islemciler/AMDRyzen7-5800X3D.jpg'),
+('ASUS ROG Strix Z790-E Anakart', 'DDR5 destekli, üst düzey oyuncu anakartı.', 18500.00, 10, 'Anakartlar', '/assets/img/products/Anakartlar/ASUSROGCrosshairX670E.jpg');
 
 --Favoriler ve Ürünler Tablosu Bağlantısı
 ALTER TABLE Favorites

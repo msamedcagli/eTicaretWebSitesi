@@ -1,64 +1,67 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Arayüzü test etmek için mock (örnek) verileri yüklüyoruz.
-    loadMockFavorites();
+    const user = localStorage.getItem('kullaniciBilgileri');
+    const authLink = document.getElementById('header-profile-link');
+
+    if (user) {
+        const data = JSON.parse(user);
+        // Header'daki Hesabım linkini güncelle
+        authLink.innerHTML = `<i class="fa-regular fa-user"></i> ${data.user.name || 'Hesabım'}`;
+        authLink.href = "../profile/index.html";
+    } else {
+        showToast("Favorilerinizi görmek için giriş yapmalısınız!", "error");
+        setTimeout(() => {
+            window.location.href = "../login/index.html";
+        }, 2000);
+        return;
+    }
+
+    // Gerçek favorileri yükleme fonksiyonu buraya gelecek (API bağlandığında)
+    loadRealFavorites();
 });
 
-// Backend bağlanana kadar arayüzü besleyecek örnek veriler
-const mockFavorites = [
-    {
-        id: 1,
-        ad: "Intel Core i9-13900K İşlemci",
-        kategori: "İşlemciler",
-        fiyat: "18.500",
-        resim_url: "https://m.media-amazon.com/images/I/61yKqO-XlCL._AC_SL1500_.jpg"
-    },
-    {
-        id: 2,
-        ad: "ASUS ROG Strix GeForce RTX 4090",
-        kategori: "Ekran Kartları",
-        fiyat: "75.000",
-        resim_url: "https://m.media-amazon.com/images/I/81B-74E2f7L._AC_SL1500_.jpg"
-    },
-    {
-        id: 3,
-        ad: "Samsung 990 PRO 2TB NVMe SSD",
-        kategori: "Depolama",
-        fiyat: "6.200",
-        resim_url: "https://m.media-amazon.com/images/I/71h3A2I8G8L._AC_SL1500_.jpg"
-    }
-];
-
-function loadMockFavorites() {
+function loadRealFavorites() {
     const grid = document.getElementById('favoritesGrid');
     const countText = document.getElementById('favoritesCount');
-
-    grid.innerHTML = '';
-    countText.textContent = `${mockFavorites.length} Ürün`;
-
-    mockFavorites.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        
-        // KARTA TIKLAYINCA: Ürün detay sayfasına ID ile yönlendirme yapar
-        card.onclick = () => {
-            window.location.href = `../home/product-detail.html?id=${product.id}`;
-        };
-
-        card.innerHTML = `
-            <img src="${product.resim_url}" alt="${product.ad}">
-            <p class="category">${product.kategori}</p>
-            <h4>${product.ad}</h4>
-            <p class="price">${product.fiyat} TL</p>
-            
-            <div class="button-group">
-                <button class="add-to-cart" onclick="event.stopPropagation(); alert('Sepete eklendi!')">
-                    <i class="fa-solid fa-cart-plus"></i> Sepete Ekle
-                </button>
-                <button class="remove-btn" onclick="event.stopPropagation(); alert('Silme işlemi Samet API leri bağladığında çalışacaktır.')" title="Favorilerden Kaldır">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
+    
+    // API bağlandığında burası fetch ile doldurulacak
+    grid.innerHTML = `
+        <div style="text-align:center; grid-column: 1/-1; padding: 50px;">
+            <i class="fa-solid fa-heart-circle-xmark" style="font-size: 3rem; color: #334155; margin-bottom: 20px;"></i>
+            <p style="color: #64748b;">Henüz favori ürününüz bulunmuyor.</p>
+            <a href="../home/index.html" style="color: #38bdf8; text-decoration: none; display: inline-block; margin-top: 10px;">Alışverişe Başla</a>
+        </div>
+    `;
+    countText.textContent = "0 Ürün";
 }
+
+function showToast(message, type = "success") {
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`;
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'error' ? '#ef4444' : '#10b981'};
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease-out;
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = "slideOut 0.3s ease-in forwards";
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Toast Animasyonları için Style ekleme
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+`;
+document.head.appendChild(style);

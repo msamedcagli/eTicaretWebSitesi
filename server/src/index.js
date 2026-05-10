@@ -1,3 +1,5 @@
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const express = require('express');
 const cors = require('cors');
 const { connectDB } = require('./data/db'); // DB bağlantısını en üste, ait olduğu yere aldık
@@ -16,6 +18,12 @@ connectDB();
 // Middleware'ler
 app.use(cors());
 app.use(express.json());
+
+// Log Middleware (Hata ayıklama için)
+app.use((req, res, next) => {
+    console.log(`${new Date().toLocaleTimeString()} - [${req.method}] ${req.path}`);
+    next();
+});
 
 // API Yönlendirmeleri
 app.use('/api/auth', authRoutes);

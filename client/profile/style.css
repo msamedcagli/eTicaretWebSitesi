@@ -27,137 +27,207 @@ body {
     color: var(--text-main);
 }
 
-/* --- NAVBAR GÜNCELLEMESİ --- */
-.navbar {
+/* /* --- HEADER & NAV (Home sayfasından alındı) --- */
+.main-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 8%;
-    background-color: var(--primary-dark);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.navbar .logo {
+    padding: 20px 8%;
+    background-color: #0f172a;
     color: white;
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
 }
 
-.nav-links a {
-    margin-left: 25px;
-    text-decoration: none;
+.logo h2 a { color: #38bdf8; text-decoration: none; font-weight: 700; }
+
+.search-bar { display: flex; width: 40%; }
+.search-bar input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+    background-color: #1e293b;
+    color: white;
+}
+
+.search-bar button {
+    padding: 12px 20px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.user-actions a { 
+    margin-left: 20px; 
+    font-weight: 500; 
+    transition: color 0.3s; 
     color: #cbd5e1;
-    font-weight: 500;
-    transition: var(--transition);
+    text-decoration: none;
 }
+.user-actions a:hover { color: #38bdf8; }
 
-.nav-links a:hover, #nav-profile-link {
-    color: white;
+.category-nav {
+    background-color: #0f172a;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 0;
 }
-
-#nav-profile-link {
-    background: rgba(59, 130, 246, 0.15);
-    padding: 8px 18px;
-    border-radius: 30px;
-    border: 1px solid var(--accent-blue);
+.category-nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
+.category-nav a {
+    display: block;
+    padding: 15px 25px;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+.category-nav a:hover {
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.05);
 }
 
 /* --- PROFİL CONTAINER --- */
 .profile-container {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 2.5rem;
-    max-width: 1300px;
+    max-width: 900px;
     margin: 3rem auto;
     padding: 0 2rem;
 }
 
-/* --- SIDEBAR TEMİZLİĞİ VE SÜSLEME --- */
-.profile-sidebar {
-    background-color: var(--card-white);
+.profile-card {
+    background: var(--card-white);
     border-radius: var(--border-radius);
-    padding: 2.5rem 1.5rem;
+    padding: 2rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-    height: fit-content;
+    margin-bottom: 2rem;
+    border: 1px solid #e2e8f0;
 }
 
-.user-avatar img {
-    border-radius: 50%;
-    border: 3px solid #f1f5f9;
-    padding: 4px;
-    transition: var(--transition);
-}
-
-.sidebar-name {
-    margin-top: 1rem;
+.card-title {
+    font-size: 1.4rem;
     color: var(--primary-dark);
-    font-size: 1.2rem;
-}
-
-.sidebar-menu {
-    list-style: none; /* Soldaki noktaları siler */
-    margin-top: 2rem;
-}
-
-.sidebar-menu a {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid #f1f5f9;
     display: flex;
     align-items: center;
-    padding: 12px 16px;
-    text-decoration: none;
-    color: var(--text-muted);
-    border-radius: 10px;
-    margin-bottom: 5px;
-    font-weight: 600;
-    transition: var(--transition);
+    gap: 10px;
 }
 
-.sidebar-menu li.active a, .sidebar-menu a:hover:not(.logout) {
-    background-color: #eff6ff;
+.card-title i {
     color: var(--accent-blue);
-}
-
-.sidebar-menu a.logout {
-    color: #ef4444;
-    margin-top: 2rem;
-    border: 1px dashed #fecaca;
-}
-
-.sidebar-menu a.logout:hover {
-    background-color: #fef2f2;
 }
 
 /* --- BİLGİ KARTLARI --- */
 .info-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
 }
 
-.info-card {
-    background: var(--card-white);
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    border: 1px solid #e2e8f0;
-    transition: var(--transition);
+.info-item {
+    display: flex;
+    flex-direction: column;
 }
 
-.info-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.06);
-    border-color: var(--accent-blue);
-}
-
-.card-label {
+.info-label {
     font-size: 0.75rem;
     font-weight: 700;
-    color: var(--accent-blue);
+    color: var(--text-muted);
     text-transform: uppercase;
-    display: block;
     margin-bottom: 0.5rem;
 }
 
-/* --- SİPARİŞ KARTLARI (YENİ TASARIM) --- */
+.info-item h4 {
+    color: var(--text-main);
+    font-size: 1.1rem;
+}
+
+/* --- ŞİFRE BÖLÜMÜ --- */
+.password-section.centered-content {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.password-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.password-inputs input {
+    padding: 14px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    outline: none;
+    transition: var(--transition);
+    text-align: center;
+}
+
+.password-inputs input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-update {
+    background-color: var(--primary-dark);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    flex: 1;
+}
+
+.btn-update:hover {
+    background-color: var(--accent-blue);
+    transform: translateY(-2px);
+}
+
+.btn-logout {
+    background-color: #fef2f2;
+    color: #ef4444;
+    border: 1px solid #fee2e2;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.btn-logout:hover {
+    background-color: #ef4444;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.2);
+}
+
+/* --- SİPARİŞ KARTLARI --- */
 .order-list {
     display: flex;
     flex-direction: column;
@@ -165,112 +235,33 @@ body {
 }
 
 .order-card {
-    background: var(--card-white);
-    border-radius: var(--border-radius);
-    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 1.2rem;
     border: 1px solid #e2e8f0;
-    border-left: 5px solid var(--primary-dark);
     transition: var(--transition);
 }
 
 .order-card:hover {
-    transform: translateX(8px);
+    background: white;
     border-color: var(--accent-blue);
+    transform: translateX(5px);
 }
 
 .order-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 0.8rem;
-    border-bottom: 1px solid #f1f5f9;
+    margin-bottom: 0.8rem;
 }
 
-.order-no {
-    font-weight: 800;
-    color: var(--primary-dark);
-}
-
-.order-status {
-    font-size: 0.75rem;
-    padding: 5px 14px;
-    border-radius: 20px;
-    font-weight: 700;
-}
-
+.order-no { font-weight: 700; color: var(--primary-dark); }
+.order-status { font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; font-weight: 700; }
 .order-status.success { background: var(--success-bg); color: var(--success-text); }
 .order-status.pending { background: var(--pending-bg); color: var(--pending-text); }
 
-.order-body {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.order-body p {
-    font-size: 0.95rem;
-    color: var(--text-main);
-}
-
-.order-body strong {
-    color: var(--text-muted);
-    font-weight: 500;
-}
-
-.order-body .tutar {
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: var(--primary-dark);
-}
-
-/* Mobil */
-@media (max-width: 992px) {
-    .profile-container { grid-template-columns: 1fr; }
-}
-
-/* Şifre Bölümü Özel Stilleri */
-.password-card {
-    max-width: 600px;
-}
-
-.password-inputs {
-    display: flex;
-    gap: 1rem;
-    margin: 1rem 0;
-}
-
-.password-inputs input {
-    flex: 1;
-    padding: 10px 15px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    outline: none;
-    transition: var(--transition);
-}
-
-.password-inputs input:focus {
-    border-color: var(--accent-blue);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.btn-update {
-    background-color: var(--primary-dark);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.btn-update:hover {
-    background-color: var(--accent-blue);
-}
-
-#password-message {
-    margin-top: 10px;
-    font-size: 0.85rem;
-    font-weight: 500;
-}
+@media (max-width: 768px) {
+    .main-header { padding: 15px 5%; flex-direction: column; gap: 15px; }
+    .search-bar { width: 100%; }
+    .security-flex { flex-direction: column; gap: 2rem; }
+    .password-section, .logout-section { width: 100%; }
+}
