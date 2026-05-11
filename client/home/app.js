@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <h4>${product.Name}</h4>
                     <p class="category">${product.Category}</p>
                     <p class="price">${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(product.Price)}</p>
-                    <button class="add-to-cart ${product.Stock <= 0 ? 'disabled' : ''}" ${product.Stock <= 0 ? 'disabled' : ''}>
+                    <button class="add-to-cart ${product.Stock <= 0 ? 'disabled' : ''}" ${product.Stock <= 0 ? 'disabled' : ''} data-id="${product.Id}">
                         ${product.Stock <= 0 ? 'Stokta Yok' : '<i class="fa-solid fa-cart-plus"></i> Sepete Ekle'}
                     </button>
                 `;
@@ -112,13 +112,52 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Sepete Ekleme Butonları İçin Global Kontrol
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.add-to-cart')) {
-            const loggedIn = getCookie('userSession') || localStorage.getItem('kullaniciBilgileri');
-            if (!loggedIn) {
+    document.addEventListener('click', async function(e) {
+        const cartBtn = e.target.closest('.add-to-cart');
+        if (cartBtn) {
+            const kullaniciVerisi = getCookie('userSession') || localStorage.getItem('kullaniciBilgileri');
+            if (!kullaniciVerisi) {
                 e.preventDefault();
                 e.stopPropagation();
                 showToast("Sepete ürün eklemek için giriş yapmalısınız!", "error");
+                return;
+            }
+
+            const user = JSON.parse(kullaniciVerisi);
+            const productCard = cartBtn.closest('.product-card');
+            
+            // Eğer ürün ID'si yoksa (statik ürünler için), urun bilgisini card'dan alabiliriz 
+            // ama dinamik yüklenenlerde ID'yi bir data attribute olarak saklamalıyız.
+            // app.js'de ürün kartı oluşturulurken Id eklemeliyiz.
+            const productId = cartBtn.getAttribute('data-id');
+
+            if (!productId) {
+                showToast("Ürün bilgisi alınamadı.", "error");
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-user-id': user.id
+                    },
+                    body: JSON.stringify({
+                        productId: parseInt(productId),
+                        quantity: 1
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    showToast("Ürün başarıyla sepete eklendi!", "success");
+                } else {
+                    showToast(result.error || "Bir hata oluştu.", "error");
+                }
+            } catch (error) {
+                console.error("Sepete ekleme hatası:", error);
+                showToast("Sunucuya bağlanılamadı.", "error");
             }
         }
     });

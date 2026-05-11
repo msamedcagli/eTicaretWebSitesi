@@ -16,9 +16,9 @@
             <button><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
         <div class="user-actions">
-            <a href="#" id="header-profile-link"><i class="fa-regular fa-user"></i> Hesabım</a>
+            <a href="#" id="header-profile-link" class="active"><i class="fa-regular fa-user"></i> Profil</a>
             <a href="../favorites/index.html"><i class="fa-regular fa-heart"></i> Favoriler</a>
-            <a href="#"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+            <a href="../cart/index.html"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
         </div>
     </header>
 
@@ -67,27 +67,8 @@
             <!-- Kart 3: Sipariş Geçmişi -->
             <div class="profile-card">
                 <h2 class="card-title"><i class="fa-solid fa-bag-shopping"></i> Geçmiş Siparişlerim</h2>
-                <div class="order-list">
-                    <div class="order-card">
-                        <div class="order-header">
-                            <span class="order-no">Sipariş No: #SP-8472</span>
-                            <span class="order-status success">Teslim Edildi</span>
-                        </div>
-                        <div class="order-body">
-                            <p><strong>Ürün:</strong> AMD Ryzen 9 7950X 4.5GHz</p>
-                            <p><strong>Tutar:</strong> 16,899,00 TL</p>
-                        </div>
-                    </div>
-                    <div class="order-card">
-                        <div class="order-header">
-                            <span class="order-no">Sipariş No: #SP-8499</span>
-                            <span class="order-status pending">Hazırlanıyor</span>
-                        </div>
-                        <div class="order-body">
-                            <p><strong>Ürün:</strong> ASUS ROG Maximus Z790 Hero</p>
-                            <p><strong>Tutar:</strong> 22,450,00 TL</p>
-                        </div>
-                    </div>
+                <div class="order-list" id="order-list">
+                    <p class="loading-msg">Siparişleriniz yükleniyor...</p>
                 </div>
             </div>
 

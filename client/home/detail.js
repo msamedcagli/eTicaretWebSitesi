@@ -107,4 +107,99 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         });
     }
+    // --- SEPETE EKLEME ---
+    const addToCartBigBtn = document.querySelector(".add-to-cart-big");
+    if (addToCartBigBtn) {
+        addToCartBigBtn.addEventListener("click", async () => {
+            const kullaniciVerisi = getCookie('userSession') || localStorage.getItem('kullaniciBilgileri');
+            if (!kullaniciVerisi) {
+                showToast("Sepete ürün eklemek için giriş yapmalısınız!", "error");
+                return;
+            }
+
+            const user = JSON.parse(kullaniciVerisi);
+            const quantity = parseInt(document.getElementById('qty').value);
+
+            if (!productId) {
+                showToast("Ürün bilgisi alınamadı.", "error");
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-user-id': user.id
+                    },
+                    body: JSON.stringify({
+                        productId: parseInt(productId),
+                        quantity: quantity
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    showToast("Ürün başarıyla sepete eklendi!", "success");
+                } else {
+                    showToast(result.error || "Bir hata oluştu.", "error");
+                }
+            } catch (error) {
+                console.error("Sepete ekleme hatası:", error);
+                showToast("Sunucuya bağlanılamadı.", "error");
+            }
+        });
+    }
 });
+
+// Yardımcı Fonksiyonlar (app.js'den kopyalandı veya oradan erişilebilir olmalı)
+function getCookie(name) {
+    let nameEQ = name + "=";
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+function showToast(message, type = "success") {
+    let toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toast-container';
+        toastContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+        document.body.appendChild(toastContainer);
+    }
+
+    const toast = document.createElement("div");
+    toast.style.cssText = `
+        background: ${type === 'error' ? '#ef4444' : '#10b981'};
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease-out;
+        font-family: 'Outfit', sans-serif;
+        font-weight: 600;
+    `;
+    toast.textContent = message;
+    toastContainer.appendChild(toast);
+
+    if (!document.getElementById('toast-styles')) {
+        const style = document.createElement('style');
+        style.id = 'toast-styles';
+        style.textContent = `
+            @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+            @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        `;
+        document.head.appendChild(style);
+    }
+
+    setTimeout(() => {
+        toast.style.animation = "slideOut 0.3s ease-in forwards";
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}

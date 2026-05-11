@@ -24,7 +24,52 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     fetchProfileData();
+    fetchOrders();
 });
+
+async function fetchOrders() {
+    try {
+        const userString = localStorage.getItem('kullaniciBilgileri');
+        if (!userString) return;
+        const userData = JSON.parse(userString);
+        
+        const response = await fetch('http://localhost:5000/api/orders', {
+            headers: { 'x-user-id': userData.user.id }
+        });
+
+        if (!response.ok) throw new Error('Siparişler alınamadı');
+        const orders = await response.json();
+        const orderList = document.getElementById('order-list');
+
+        if (orders.length === 0) {
+            orderList.innerHTML = '<p class="no-orders">Henüz bir siparişiniz bulunmuyor.</p>';
+            return;
+        }
+
+        orderList.innerHTML = "";
+        orders.forEach(order => {
+            const date = new Date(order.CreatedAt).toLocaleDateString('tr-TR');
+            const card = document.createElement('div');
+            card.className = 'order-card';
+            card.innerHTML = `
+                <div class="order-header">
+                    <span class="order-no">Sipariş No: #${order.OrderNumber}</span>
+                    <span class="order-status ${order.Status === 'Teslim Edildi' ? 'success' : 'pending'}">${order.Status}</span>
+                </div>
+                <div class="order-body">
+                    <p><strong>Tarih:</strong> ${date}</p>
+                    <p><strong>Tutar:</strong> ${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(order.TotalAmount)}</p>
+                    <p><strong>Ürün Sayısı:</strong> ${order.ItemCount}</p>
+                </div>
+            `;
+            orderList.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error('Sipariş çekme hatası:', error);
+        document.getElementById('order-list').innerHTML = '<p class="error-msg">Siparişler yüklenirken bir hata oluştu.</p>';
+    }
+}
 
 async function fetchProfileData() {
     try {

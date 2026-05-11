@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtlasTech - Sepetim</title>
+    <link rel="stylesheet" href="../home/style.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <h2><a href="../home/index.html"><i class="fa-solid fa-microchip"></i> AtlasTech</a></h2>
+        </div>
+        <div class="user-actions">
+            <a href="../profile/index.html"><i class="fa-regular fa-user"></i> Profil</a>
+            <a href="../favorites/index.html"><i class="fa-regular fa-heart"></i> Favoriler</a>
+            <a href="index.html" class="active"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+        </div>
+    </header>
+
+    <main class="cart-container">
+        <h1 class="page-title">Alışveriş Sepetim</h1>
+
+        <div class="cart-wrapper">
+            <div class="cart-items-section" id="cart-items-list">
+                <!-- Sepet ürünleri JS ile buraya yüklenecek -->
+                <div class="loading">Sepetiniz yükleniyor...</div>
+            </div>
+
+            <div class="cart-summary-section">
+                <div class="summary-card">
+                    <h3>Sipariş Özeti</h3>
+                    <div class="summary-row">
+                        <span>Ara Toplam</span>
+                        <span id="subtotal">0,00 TL</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Kargo</span>
+                        <span id="shipping">Ücretsiz</span>
+                    </div>
+                    <hr>
+                    <div class="summary-row total">
+                        <span>Toplam</span>
+                        <span id="total-amount">0,00 TL</span>
+                    </div>
+                    <button id="checkout-btn" class="checkout-btn" disabled>ÖDEME YAP</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
