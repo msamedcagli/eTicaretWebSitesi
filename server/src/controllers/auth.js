@@ -13,7 +13,7 @@ exports.register = async (req, res) => {
 
     try {
         const pool = await connectDB();
-        
+
         // 1. Kullanıcı zaten var mı kontrol et?
         const checkUser = await pool.request()
             .input('email', sql.NVarChar, email)
@@ -55,7 +55,7 @@ exports.login = async (req, res) => {
 
     try {
         const pool = await connectDB();
-        
+
         // 1. Kullanıcıyı bul
         const result = await pool.request()
             .input('email', sql.NVarChar, email)
@@ -76,13 +76,13 @@ exports.login = async (req, res) => {
             return res.status(401).json({ error: 'Girdiğiniz E-posta veya Parola hatalı.' });
         }
 
-        console.log(`Giriş başarılı: ${email}`);
-        res.status(200).json({ 
-            message: 'Başarıyla giriş yapıldı.', 
-            user: { 
+        console.log(`Giriş başarılı: ${email} (ID: ${user.id})`);
+        res.status(200).json({
+            message: 'Başarıyla giriş yapıldı.',
+            user: {
                 id: user.id,
-                email: user.email 
-            } 
+                email: user.email
+            }
         });
     } catch (err) {
         console.error('Giriş Hatası (Detaylı):', err);
@@ -105,7 +105,7 @@ exports.getProfile = async (req, res) => {
         const result = await pool.request()
             .input('email', sql.NVarChar, userEmail)
             .query('SELECT email as Email, phone as Phone, createdAt as CreatedAt FROM Users WHERE email = @email');
-        
+
         if (result.recordset.length > 0) {
             console.log(`Profil başarıyla çekildi: ${userEmail}`);
             res.json(result.recordset[0]);
@@ -121,11 +121,11 @@ exports.getProfile = async (req, res) => {
 
 exports.changePassword = async (req, res) => {
     const { email, currentPassword, newPassword } = req.body;
-    
+
     // Güvenli loglama: Şifreleri SHA-256 ile hash'leyerek karşılaştır (Loglara basma)
     const hashCurrent = crypto.createHash('sha256').update(currentPassword || '').digest('hex');
     const hashNew = crypto.createHash('sha256').update(newPassword || '').digest('hex');
-    
+
     console.log(`Şifre değiştirme işlemi deneniyor: ${email}`);
 
     // Aynı şifre kontrolü (Hash karşılaştırması ile)
@@ -140,7 +140,7 @@ exports.changePassword = async (req, res) => {
 
     try {
         const pool = await connectDB();
-        
+
         // 1. Kullanıcıyı bul
         const result = await pool.request()
             .input('email', sql.NVarChar, email)

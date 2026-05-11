@@ -6,10 +6,11 @@ const { connectDB } = require('./data/db'); // DB bağlantısını en üste, ait
 
 // Rota dosyalarımız
 const authRoutes = require('./routes/auth.js');
-const favoriteRoutes = require('./routes/favorites.js'); 
+const favoriteRoutes = require('./routes/favorites.js');
 const productRoutes = require('./routes/products.js');
 const cartRoutes = require('./routes/cart.js');
 const orderRoutes = require('./routes/orders.js');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,7 +30,7 @@ app.use((req, res, next) => {
 
 // API Yönlendirmeleri
 app.use('/api/auth', authRoutes);
-app.use('/api/favorites', favoriteRoutes); 
+app.use('/api/favorites', favoriteRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
