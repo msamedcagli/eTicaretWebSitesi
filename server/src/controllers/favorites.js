@@ -1,48 +1,65 @@
 const { sql, connectDB } = require('../data/db');
 
 const toggleFavorite = async (req, res) => {
-    const { userId, productId } = req.body; 
-    console.log(`Favori işlemi isteği: Kullanıcı ${userId}, Ürün ${productId}`);
+    const { userId, productId } = req.body;
+    console.log(`--- Favori İşlemi: User ${userId}, Prod ${productId} ---`);
 
-    // Gelen verileri kontrol edelim, eksik varsa hiç yormayalım sistemi
     if (!userId || !productId) {
-        console.warn(`Favori Hatası: Eksik veri (userId: ${userId}, productId: ${productId})`);
-        return res.status(400).json({ message: 'Kullanıcı ID ve Ürün ID zorunludur.' });
+        return res.status(400).json({ message: 'Eksik veri!' });
     }
 
     try {
-        const pool = await connectDB();
+        const pool = await connectDB(); // Bağlantıyı bekle ve al
 
-        // 1. Durum Kontrolü: Bu ürün bu kullanıcının favorilerinde zaten var mı?
+        // 1. Durum Kontrolü
         const checkResult = await pool.request()
             .input('userId', sql.Int, userId)
             .input('productId', sql.Int, productId)
             .query('SELECT * FROM Favorites WHERE UserId = @userId AND ProductId = @productId');
 
         if (checkResult.recordset.length > 0) {
-            // VARSA: Demek ki 2. kez tıklamış (Favoriden çıkarmak istiyor)
+            // VARSA: SİL
             await pool.request()
                 .input('userId', sql.Int, userId)
                 .input('productId', sql.Int, productId)
                 .query('DELETE FROM Favorites WHERE UserId = @userId AND ProductId = @productId');
 
-            console.log(`Ürün favorilerden ÇIKARILDI: Kullanıcı ${userId}, Ürün ${productId}`);
-            return res.status(200).json({ message: 'Ürün favorilerden çıkarıldı.', isFavorite: false });
+            console.log("SİSTEM: Favoriden çıkarıldı.");
+            return res.status(200).json({ message: 'Çıkarıldı', isFavorite: false });
         } else {
-            // YOKSA: Demek ki ilk kez tıklıyor (Favorilere eklemek istiyor)
+            // YOKSA: EKLE
             await pool.request()
                 .input('userId', sql.Int, userId)
                 .input('productId', sql.Int, productId)
                 .query('INSERT INTO Favorites (UserId, ProductId) VALUES (@userId, @productId)');
 
-            console.log(`Ürün favorilere EKLENDİ: Kullanıcı ${userId}, Ürün ${productId}`);
-            return res.status(200).json({ message: 'Ürün favorilere eklendi.', isFavorite: true });
+            console.log("SİSTEM: Favoriye eklendi.");
+            return res.status(200).json({ message: 'Eklendi', isFavorite: true });
         }
 
     } catch (error) {
-        console.error(`Favori İşlemi Hatası (User: ${userId}, Prod: ${productId}):`, error);
-        res.status(500).json({ message: 'Sunucu hatası oluştu.' });
+        console.error("Favori SQL Hatası:", error.message);
+        res.status(500).json({ message: 'Hata oluştu.' });
     }
 };
 
-module.exports = { toggleFavorite };
+const getFavorites = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const pool = await connectDB();
+        const result = await pool.request()
+            .input('uID', sql.Int, userId)
+            .query(`
+                SELECT p.Id, p.Name, p.Price, p.ImageUrl, p.Category 
+                FROM Products p
+                JOIN Favorites f ON p.Id = f.ProductId
+                WHERE f.UserId = @uID`);
+
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        console.error("Listeleme Hatası:", error.message);
+        res.status(500).json({ message: 'Hata.' });
+    }
+};
+
+module.exports = { toggleFavorite, getFavorites };

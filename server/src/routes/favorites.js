@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { toggleFavorite } = require('../controllers/favorites');
+const favoritesController = require('../controllers/favorites');
 
-// POST: /api/favorites/toggle
-router.post('/toggle', toggleFavorite);
+// Favori EKLEME/ÇIKARMA işlemi (Frontend'den gelen POST isteği için)
+router.post('/toggle', favoritesController.toggleFavorite);
+
+// Favorileri LİSTELEME işlemi
+router.get('/:userId', favoritesController.getFavorites);
 
 module.exports = router;
