@@ -10,8 +10,14 @@ const authMiddleware = (req, res, next) => {
         return res.status(401).json({ error: 'Yetkisiz erişim. Lütfen giriş yapın.' });
     }
 
+    const userIntId = parseInt(userId);
+    
+    if (isNaN(userIntId)) {
+        return res.status(401).json({ error: 'Geçersiz kullanıcı ID\'si. Lütfen tekrar giriş yapın.' });
+    }
+
     // req.user nesnesini ayarla
-    req.user = { id: parseInt(userId) };
+    req.user = { id: userIntId };
     next();
 };
 

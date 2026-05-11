@@ -7,6 +7,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     const imgFromUrl = params.get("img");
     const catFromUrl = params.get("cat");
 
+    const sessionCookieHeader = getCookie('userSession');
+    const storageDataHeader = localStorage.getItem('kullaniciBilgileri');
+    const userActions = document.querySelector('.user-actions');
+    
+    if (userActions) {
+        if (sessionCookieHeader && storageDataHeader) {
+            userActions.innerHTML = `
+                <a href="../profile/index.html"><i class="fa-regular fa-user"></i> Profil</a>
+                <a href="../favorites/index.html"><i class="fa-regular fa-heart"></i> Favoriler</a>
+                <a href="../cart/index.html"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+            `;
+        } else {
+            if (sessionCookieHeader || storageDataHeader) {
+                localStorage.removeItem('kullaniciBilgileri');
+                document.cookie = "userSession=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            }
+            userActions.innerHTML = `
+                <a href="../login/index.html" class="login-btn-header"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</a>
+            `;
+        }
+    }
+
     // 2. İlk aşama: URL'den gelen verileri hemen göster (Kullanıcı bekletilmez)
     if (titleFromUrl) {
         document.getElementById("detailTitle").innerText = titleFromUrl;
@@ -87,13 +109,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (favBtn) {
         const favIcon = favBtn.querySelector("i");
         favBtn.addEventListener("click", async () => {
+            const kullaniciVerisi = getCookie('userSession') || localStorage.getItem('kullaniciBilgileri');
+            if (!kullaniciVerisi) {
+                showToast("Favori eklemek için giriş yapmalısınız!", "error");
+                return;
+            }
+            const user = JSON.parse(kullaniciVerisi);
+
             favBtn.classList.toggle("active");
             if (productId) {
                 try {
                     const response = await fetch('http://localhost:5000/api/favorites/toggle', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ userId: 1, productId: parseInt(productId) }),
+                        body: JSON.stringify({ userId: user?.user?.id, productId: parseInt(productId) }),
                     });
                     const data = await response.json();
                     if (response.ok) {
@@ -130,7 +159,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-user-id': user.id
+                        'x-user-id': user?.user?.id
                     },
                     body: JSON.stringify({
                         productId: parseInt(productId),
@@ -169,7 +198,17 @@ function showToast(message, type = "success") {
     if (!toastContainer) {
         toastContainer = document.createElement('div');
         toastContainer.id = 'toast-container';
-        toastContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+        toastContainer.style.cssText = `
+            position: fixed; 
+            top: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+        `;
         document.body.appendChild(toastContainer);
     }
 
@@ -181,9 +220,12 @@ function showToast(message, type = "success") {
         border-radius: 8px;
         margin-bottom: 10px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        animation: slideIn 0.3s ease-out;
+        animation: slideInDown 0.4s ease-out;
         font-family: 'Outfit', sans-serif;
         font-weight: 600;
+        pointer-events: auto;
+        min-width: 250px;
+        text-align: center;
     `;
     toast.textContent = message;
     toastContainer.appendChild(toast);
@@ -192,14 +234,19 @@ function showToast(message, type = "success") {
         const style = document.createElement('style');
         style.id = 'toast-styles';
         style.textContent = `
-            @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-            @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+            @keyframes slideInDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+            @keyframes slideOutUp { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-100%); opacity: 0; } }
         `;
         document.head.appendChild(style);
     }
 
     setTimeout(() => {
-        toast.style.animation = "slideOut 0.3s ease-in forwards";
-        setTimeout(() => toast.remove(), 300);
+        toast.style.animation = "slideOutUp 0.4s ease-in forwards";
+        setTimeout(() => {
+            toast.remove();
+            if (toastContainer.childNodes.length === 0) {
+                toastContainer.remove();
+            }
+        }, 400);
     }, 3000);
 }

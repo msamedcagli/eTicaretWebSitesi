@@ -54,17 +54,18 @@ exports.placeOrder = async (req, res) => {
 
         // 6. Her bir ürün için OrderItems ekle ve Stoktan düş
         for (const item of cartItems) {
+            const productId = item.id || item.ProductId || item.Id;
             // OrderItems ekle
             await transaction.request()
                 .input('orderId', sql.Int, orderId)
-                .input('productId', sql.Int, item.ProductId)
+                .input('productId', sql.Int, productId)
                 .input('quantity', sql.Int, item.Quantity)
                 .input('unitPrice', sql.Decimal(18, 2), item.Price)
                 .query('INSERT INTO OrderItems (OrderId, ProductId, Quantity, UnitPrice) VALUES (@orderId, @productId, @quantity, @unitPrice)');
 
             // Stoktan düş
             await transaction.request()
-                .input('productId', sql.Int, item.ProductId)
+                .input('productId', sql.Int, productId)
                 .input('quantity', sql.Int, item.Quantity)
                 .query('UPDATE Products SET Stock = Stock - @quantity WHERE Id = @productId');
         }
@@ -102,8 +103,16 @@ exports.getUserOrders = async (req, res) => {
         const result = await pool.request()
             .input('userId', sql.Int, userId)
             .query(`
-                SELECT o.Id, o.OrderNumber, o.TotalAmount, o.Status, o.CreatedAt,
-                (SELECT COUNT(*) FROM OrderItems WHERE OrderId = o.Id) as ItemCount
+                SELECT 
+                    o.Id, o.OrderNumber, o.TotalAmount, o.Status, o.CreatedAt,
+                    (SELECT COUNT(*) FROM OrderItems WHERE OrderId = o.Id) as ItemCount,
+                    (
+                        SELECT p.Id as id, p.Name, p.ImageUrl, oi.Quantity, oi.UnitPrice
+                        FROM OrderItems oi
+                        JOIN Products p ON oi.ProductId = p.Id
+                        WHERE oi.OrderId = o.Id
+                        FOR JSON PATH
+                    ) as Items
                 FROM Orders o
                 WHERE o.UserId = @userId
                 ORDER BY o.CreatedAt DESC

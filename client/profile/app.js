@@ -1,8 +1,42 @@
+// Yardımcı Fonksiyonlar
+function getCookie(name) {
+    let nameEQ = name + "=";
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+async function forceLogout() {
+    const userString = localStorage.getItem('kullaniciBilgileri');
+    const userData = userString ? JSON.parse(userString) : null;
+    
+    try {
+        await fetch('http://localhost:5000/api/auth/logout', {
+            method: 'POST',
+            headers: { 'x-user-id': userData?.user?.id }
+        });
+    } catch (err) {}
+
+    localStorage.removeItem('kullaniciBilgileri');
+    document.cookie = "userSession=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.replace('../login/index.html');
+}
+
 // Sayfa yüklendiğinde verileri çek
 (function checkAuth() {
-    const user = localStorage.getItem('kullaniciBilgileri');
-    if (!user) {
-        alert("Bu sayfayı görüntülemek için giriş yapmalısınız.");
+    const sessionCookie = getCookie('userSession');
+    const storageData = localStorage.getItem('kullaniciBilgileri');
+    
+    if (!sessionCookie || !storageData) {
+        if (sessionCookie || storageData) {
+            // Tutarsızlık durumunda temizle
+            localStorage.removeItem('kullaniciBilgileri');
+            document.cookie = "userSession=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
         window.location.replace('../login/index.html');
     }
 })();
@@ -13,11 +47,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (kullaniciVerisi) {
         const data = JSON.parse(kullaniciVerisi);
-        authLink.innerHTML = `<i class="fa-regular fa-user"></i> ${data.user.name || 'Hesabım'}`;
+        authLink.innerHTML = `<i class="fa-regular fa-user"></i> ${data?.user?.name || 'Hesabım'}`;
         authLink.href = "../profile/index.html";
         
-        if (data.user.email) document.getElementById('profile-email').innerText = data.user.email;
-        if (data.user.phone) document.getElementById('profile-phone').innerText = data.user.phone;
+        if (data?.user?.email) document.getElementById('profile-email').innerText = data?.user?.email;
+        if (data?.user?.phone) document.getElementById('profile-phone').innerText = data?.user?.phone;
     } else {
         authLink.innerHTML = `<i class="fa-regular fa-user"></i> Giriş Yap`;
         authLink.href = "../login/index.html";
@@ -34,8 +68,13 @@ async function fetchOrders() {
         const userData = JSON.parse(userString);
         
         const response = await fetch('http://localhost:5000/api/orders', {
-            headers: { 'x-user-id': userData.user.id }
+            headers: { 'x-user-id': userData?.user?.id }
         });
+
+        if (response.status === 401) {
+            forceLogout();
+            return;
+        }
 
         if (!response.ok) throw new Error('Siparişler alınamadı');
         const orders = await response.json();
@@ -49,21 +88,57 @@ async function fetchOrders() {
         orderList.innerHTML = "";
         orders.forEach(order => {
             const date = new Date(order.CreatedAt).toLocaleDateString('tr-TR');
+            const items = order.Items ? JSON.parse(order.Items) : [];
+            
             const card = document.createElement('div');
             card.className = 'order-card';
+            
+            let itemsHtml = '<div class="order-items-preview">';
+            items.forEach(item => {
+                const finalImgUrl = item.ImageUrl.startsWith('/assets') ? `..${item.ImageUrl}` : item.ImageUrl;
+                const productId = item.id || item.ProductId || item.Id;
+                itemsHtml += `
+                    <div class="order-item-img-wrapper">
+                        <img src="${finalImgUrl}" alt="${item.Name}" class="order-item-thumb" 
+                             onclick="if(${productId}) window.location.href='../home/product-detail.html?id=${productId}'">
+                        <span class="item-qty-badge">x${item.Quantity}</span>
+                    </div>
+                `;
+            });
+            itemsHtml += '</div>';
+
             card.innerHTML = `
                 <div class="order-header">
                     <span class="order-no">Sipariş No: #${order.OrderNumber}</span>
                     <span class="order-status ${order.Status === 'Teslim Edildi' ? 'success' : 'pending'}">${order.Status}</span>
                 </div>
                 <div class="order-body">
-                    <p><strong>Tarih:</strong> ${date}</p>
-                    <p><strong>Tutar:</strong> ${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(order.TotalAmount)}</p>
-                    <p><strong>Ürün Sayısı:</strong> ${order.ItemCount}</p>
+                    <div class="order-info">
+                        <p><strong>Tarih:</strong> ${date}</p>
+                        <p><strong>Tutar:</strong> ${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(order.TotalAmount)}</p>
+                        <p><strong>Ürün Sayısı:</strong> ${order.ItemCount}</p>
+                    </div>
+                    ${itemsHtml}
                 </div>
             `;
             orderList.appendChild(card);
         });
+
+        // Modal'ı oluştur (Eğer yoksa)
+        if (!document.getElementById('imageModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'imageModal';
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <span class="close-modal">&times;</span>
+                <img class="modal-content" id="imgFull">
+                <div id="caption"></div>
+            `;
+            document.body.appendChild(modal);
+
+            modal.querySelector('.close-modal').onclick = () => modal.style.display = "none";
+            modal.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
+        }
 
     } catch (error) {
         console.error('Sipariş çekme hatası:', error);
@@ -77,13 +152,16 @@ async function fetchProfileData() {
         if (!userString) return;
         
         const userData = JSON.parse(userString);
-        const userEmail = userData.user.email;
+        const userEmail = userData?.user?.email;
 
         const response = await fetch(`http://localhost:5000/api/auth/profile?email=${encodeURIComponent(userEmail)}`); 
         
-        if (!response.ok) {
-            throw new Error('Profil bilgileri alınamadı');
+        if (response.status === 401) {
+            forceLogout();
+            return;
         }
+
+        if (!response.ok) throw new Error('Profil bilgileri alınamadı');
 
         const user = await response.json();
 
@@ -133,7 +211,17 @@ function showToast(message, type = "success") {
     if (!toastContainer) {
         toastContainer = document.createElement('div');
         toastContainer.id = 'toast-container';
-        toastContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+        toastContainer.style.cssText = `
+            position: fixed; 
+            top: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+        `;
         document.body.appendChild(toastContainer);
     }
 
@@ -145,16 +233,24 @@ function showToast(message, type = "success") {
         border-radius: 8px;
         margin-bottom: 10px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        animation: slideIn 0.3s ease-out;
+        animation: slideInDown 0.4s ease-out;
         font-family: 'Outfit', sans-serif;
         font-weight: 600;
+        pointer-events: auto;
+        min-width: 250px;
+        text-align: center;
     `;
     toast.textContent = message;
     toastContainer.appendChild(toast);
 
     setTimeout(() => {
-        toast.style.animation = "slideOut 0.3s ease-in forwards";
-        setTimeout(() => toast.remove(), 300);
+        toast.style.animation = "slideOutUp 0.4s ease-in forwards";
+        setTimeout(() => {
+            toast.remove();
+            if (toastContainer.childNodes.length === 0) {
+                toastContainer.remove();
+            }
+        }, 400);
     }, 3000);
 }
 
@@ -162,16 +258,29 @@ if (!document.getElementById('toast-styles')) {
     const style = document.createElement('style');
     style.id = 'toast-styles';
     style.textContent = `
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        @keyframes slideInDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideOutUp { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-100%); opacity: 0; } }
     `;
     document.head.appendChild(style);
 }
 
 // Çıkış Yap
-document.getElementById('logout-btn').addEventListener('click', (e) => {
+document.getElementById('logout-btn').addEventListener('click', async (e) => {
     e.preventDefault();
     if(confirm('Çıkış yapmak istediğinize emin misiniz?')) {
+        const userString = localStorage.getItem('kullaniciBilgileri');
+        const userData = userString ? JSON.parse(userString) : null;
+        
+        try {
+            // Sunucuya log basması için istek gönder
+            await fetch('http://localhost:5000/api/auth/logout', {
+                method: 'POST',
+                headers: { 'x-user-id': userData?.user?.id }
+            });
+        } catch (err) {
+            console.warn("Çıkış logu sunucuya gönderilemedi.");
+        }
+
         setCookie('authStatus', 'loggedOut', 1);
         eraseCookie('userSession');
         localStorage.clear(); 
@@ -187,23 +296,39 @@ document.getElementById('change-password-form').addEventListener('submit', async
     const newPassword = document.getElementById('new-password').value;
     const userString = localStorage.getItem('kullaniciBilgileri');
     if (!userString) return;
-    const email = JSON.parse(userString).user.email;
+    const userData = JSON.parse(userString);
 
     try {
         const response = await fetch('http://localhost:5000/api/auth/change-password', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, currentPassword, newPassword })
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-user-id': userData?.user?.id
+            },
+            body: JSON.stringify({ email: userData.user.email, currentPassword, newPassword })
         });
-        const result = await response.json();
+
+        if (response.status === 401) {
+            forceLogout();
+            return;
+        }
+
+        const data = await response.json();
         if (response.ok) {
             showToast("Şifreniz başarıyla güncellendi!", "success");
             e.target.reset(); 
         } else {
-            showToast(result.message || "Bir hata oluştu.", "error");
+            showToast(data.message || "Bir hata oluştu.", "error");
         }
     } catch (error) {
         console.error("Şifre değiştirme fetch hatası:", error);
         showToast("Sunucuya bağlanılamadı.", "error");
     }
 });
+
+window.openImageModal = function(src) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById("imgFull");
+    modal.style.display = "block";
+    modalImg.src = src;
+};

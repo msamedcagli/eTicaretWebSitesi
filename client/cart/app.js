@@ -4,19 +4,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     const totalAmountEl = document.getElementById("total-amount");
     const checkoutBtn = document.getElementById("checkout-btn");
 
-    const kullaniciVerisi = getCookie('userSession') || localStorage.getItem('kullaniciBilgileri');
-    if (!kullaniciVerisi) {
+    const sessionCookie = getCookie('userSession');
+    const storageData = localStorage.getItem('kullaniciBilgileri');
+    
+    if (!sessionCookie || !storageData) {
+        if (sessionCookie || storageData) {
+            localStorage.removeItem('kullaniciBilgileri');
+            document.cookie = "userSession=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
         window.location.href = "../login/index.html";
         return;
     }
 
-    const user = JSON.parse(kullaniciVerisi);
+    const user = JSON.parse(storageData);
+
+    function forceLogout() {
+        localStorage.removeItem('kullaniciBilgileri');
+        document.cookie = "userSession=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href = "../login/index.html";
+    }
 
     async function loadCart() {
         try {
             const response = await fetch('http://localhost:5000/api/cart', {
-                headers: { 'x-user-id': user.id }
+                headers: { 'x-user-id': user?.user?.id }
             });
+            
+            if (response.status === 401) {
+                forceLogout();
+                return;
+            }
+            
             const cartItems = await response.json();
 
             if (cartItems.length === 0) {
@@ -86,7 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (confirm("Ürünü sepetten çıkarmak istediğinize emin misiniz?")) {
                 await fetch(`http://localhost:5000/api/cart/${id}`, {
                     method: 'DELETE',
-                    headers: { 'x-user-id': user.id }
+                    headers: { 'x-user-id': user?.user?.id }
                 });
                 loadCart();
             }
@@ -99,7 +117,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     method: 'PUT',
                     headers: { 
                         'Content-Type': 'application/json',
-                        'x-user-id': user.id 
+                        'x-user-id': user?.user?.id 
                     },
                     body: JSON.stringify({ quantity: newQty })
                 });
@@ -123,8 +141,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const response = await fetch('http://localhost:5000/api/orders/checkout', {
                 method: 'POST',
-                headers: { 'x-user-id': user.id }
+                headers: { 'x-user-id': user?.user?.id }
             });
+
+            if (response.status === 401) {
+                forceLogout();
+                return;
+            }
 
             const result = await response.json();
 

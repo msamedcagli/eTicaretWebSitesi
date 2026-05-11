@@ -177,3 +177,10 @@ exports.changePassword = async (req, res) => {
         res.status(500).json({ message: "Sunucu hatası oluştu" });
     }
 };
+
+exports.logout = async (req, res) => {
+    // Frontend'den gelen email veya header'daki ID üzerinden log bas
+    const userId = req.headers['x-user-id'];
+    console.log(`Oturum kapatıldı: Kullanıcı ID ${userId || 'Bilinmiyor'}`);
+    res.status(200).json({ message: 'Oturum kapatıldı.' });
+};

@@ -9,6 +9,14 @@ function setCookie(name, value, days) {
     document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 
+// Stale Session Check
+(function checkStaleSession() {
+    const sessionCookie = document.cookie.split(';').some(c => c.trim().startsWith('userSession='));
+    if (!sessionCookie) {
+        localStorage.removeItem('kullaniciBilgileri');
+    }
+})();
+
 // Tab Switching Logic
 const tabLogin = document.getElementById('tabLogin');
 const tabRegister = document.getElementById('tabRegister');

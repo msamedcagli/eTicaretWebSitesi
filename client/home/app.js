@@ -74,6 +74,11 @@ function setCookie(name, value, days) {
     document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 
+function clearSession() {
+    localStorage.removeItem('kullaniciBilgileri');
+    document.cookie = "userSession=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
 function getCookie(name) {
     let nameEQ = name + "=";
     let ca = document.cookie.split(';');
@@ -91,20 +96,26 @@ function eraseCookie(name) {
 
 // --- PROFİL VE ERİŞİM KONTROLÜ ---
 document.addEventListener("DOMContentLoaded", function() {
-    const kullaniciVerisi = getCookie('userSession') || localStorage.getItem('kullaniciBilgileri');
+    // OTURUM KONTROLÜ VE HEADER GÜNCELLEME
+    const sessionCookie = getCookie('userSession');
+    const storageData = localStorage.getItem('kullaniciBilgileri');
     const userActions = document.querySelector('.user-actions');
-    
-    if (userActions) {
-        if (kullaniciVerisi) {
-            const data = JSON.parse(kullaniciVerisi);
-            // GİRİŞ YAPILMIŞSA: Profil, Favoriler ve Sepeti Göster
+
+    if (sessionCookie && storageData) {
+        // OTURUM AÇIKSA
+        const user = JSON.parse(storageData);
+        if (userActions) {
             userActions.innerHTML = `
                 <a href="../profile/index.html"><i class="fa-regular fa-user"></i> Profil</a>
                 <a href="../favorites/index.html"><i class="fa-regular fa-heart"></i> Favoriler</a>
-                <a href="#"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+                <a href="../cart/index.html"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
             `;
-        } else {
-            // GİRİŞ YAPILMAMIŞSA: Sadece Giriş Yap Butonunu Göster
+        }
+    } else {
+        // TUTARSIZLIK VARSA VEYA OTURUM KAPALIYSA TEMİZLE
+        if (sessionCookie || storageData) clearSession();
+        
+        if (userActions) {
             userActions.innerHTML = `
                 <a href="../login/index.html" class="login-btn-header"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</a>
             `;
@@ -141,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-user-id': user.id
+                        'x-user-id': user?.user?.id
                     },
                     body: JSON.stringify({
                         productId: parseInt(productId),
@@ -169,7 +180,17 @@ function showToast(message, type = "success") {
     if (!toastContainer) {
         toastContainer = document.createElement('div');
         toastContainer.id = 'toast-container';
-        toastContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+        toastContainer.style.cssText = `
+            position: fixed; 
+            top: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+        `;
         document.body.appendChild(toastContainer);
     }
 
@@ -181,16 +202,24 @@ function showToast(message, type = "success") {
         border-radius: 8px;
         margin-bottom: 10px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        animation: slideIn 0.3s ease-out;
+        animation: slideInDown 0.4s ease-out;
         font-family: 'Outfit', sans-serif;
         font-weight: 600;
+        pointer-events: auto;
+        min-width: 250px;
+        text-align: center;
     `;
     toast.textContent = message;
     toastContainer.appendChild(toast);
 
     setTimeout(() => {
-        toast.style.animation = "slideOut 0.3s ease-in forwards";
-        setTimeout(() => toast.remove(), 300);
+        toast.style.animation = "slideOutUp 0.4s ease-in forwards";
+        setTimeout(() => {
+            toast.remove();
+            if (toastContainer.childNodes.length === 0) {
+                toastContainer.remove();
+            }
+        }, 400);
     }, 3000);
 }
 
@@ -199,8 +228,8 @@ if (!document.getElementById('toast-styles')) {
     const style = document.createElement('style');
     style.id = 'toast-styles';
     style.textContent = `
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        @keyframes slideInDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideOutUp { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-100%); opacity: 0; } }
     `;
     document.head.appendChild(style);
 }
