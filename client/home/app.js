@@ -3,20 +3,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     const productGrid = document.querySelector(".product-grid");
     if (!productGrid) return;
 
-    // 1. Kategori Belirleme (Sayfa başlığına göre)
-    let category = "";
-    const pageTitle = document.title.toLowerCase();
+    // 1. Kategori Belirleme (URL parametresinden veya sayfa başlığından)
+    const urlParams = new URLSearchParams(window.location.search);
+    let category = urlParams.get('cat');
     
-    if (pageTitle.includes("işlemci")) category = "İşlemciler";
-    else if (pageTitle.includes("ekran kartı")) category = "Ekran Kartları";
-    else if (pageTitle.includes("anakart")) category = "Anakartlar";
-    else if (pageTitle.includes("bellek") || pageTitle.includes("ram")) category = "RAM";
-    else if (pageTitle.includes("depolama") || pageTitle.includes("ssd")) category = "SSD";
-    else if (pageTitle.includes("hazır sistem")) category = "Hazır Sistem";
+    if (category) {
+        // Eğer URL'de kategori varsa başlığı güncelle
+        const titleEl = document.getElementById('category-title');
+        if (titleEl) titleEl.textContent = category;
+        document.title = `${category} | AtlasTech`;
+    } else {
+        const pageTitle = document.title.toLowerCase();
+        if (pageTitle.includes("işlemci")) category = "İşlemciler";
+        else if (pageTitle.includes("ekran kartı")) category = "Ekran Kartları";
+        else if (pageTitle.includes("anakart")) category = "Anakartlar";
+        else if (pageTitle.includes("bellek") || pageTitle.includes("ram")) category = "RAM";
+        else if (pageTitle.includes("depolama") || pageTitle.includes("ssd")) category = "SSD";
+        else if (pageTitle.includes("hazır sistem")) category = "Hazır Sistem";
+    }
     
     // 2. API URL'sini Belirle
-    const isHomePage = window.location.pathname.endsWith("index.html") || window.location.pathname.endsWith("/");
-    const url = isHomePage 
+    const isHomePage = window.location.pathname.endsWith("index.html") || window.location.pathname.endsWith("/") || (!category && !window.location.pathname.includes('category.html'));
+    const url = (isHomePage) 
         ? "http://localhost:5000/api/products" 
         : `http://localhost:5000/api/products/category/${encodeURIComponent(category)}`;
 
