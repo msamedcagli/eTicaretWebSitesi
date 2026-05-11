@@ -108,9 +108,14 @@ async function fetchOrders() {
             itemsHtml += '</div>';
 
             card.innerHTML = `
-                <div class="order-header">
-                    <span class="order-no">Sipariş No: #${order.OrderNumber}</span>
-                    <span class="order-status ${order.Status === 'Teslim Edildi' ? 'success' : 'pending'}">${order.Status}</span>
+                <div class="order-header order-header-flex">
+                    <div class="order-title-group">
+                        <span class="order-no">Sipariş No: #${order.OrderNumber}</span>
+                        <span class="order-status ${order.Status === 'Teslim Edildi' ? 'success' : 'pending'}">${order.Status}</span>
+                    </div>
+                    <button class="cancel-order-btn" onclick="cancelOrder(${order.Id})">
+                        <i class="fa-solid fa-trash"></i> İptal Et
+                    </button>
                 </div>
                 <div class="order-body">
                     <div class="order-info">
@@ -331,4 +336,39 @@ window.openImageModal = function(src) {
     const modalImg = document.getElementById("imgFull");
     modal.style.display = "block";
     modalImg.src = src;
+};
+
+// SİPARİŞ İPTAL FONKSİYONU
+window.cancelOrder = async function(orderId) {
+    // Kullanıcıdan onay al
+    const isConfirmed = confirm("Bu siparişi iptal etmek istediğinize emin misiniz? (Ürünler sepete geri dönmez, stok iade edilir.)");
+    
+    if (!isConfirmed) return;
+
+    const userString = localStorage.getItem('kullaniciBilgileri');
+    const userData = userString ? JSON.parse(userString) : null;
+
+    try {
+        // Backend rotasına DELETE isteği at
+        const response = await fetch(`http://localhost:5000/api/orders/${orderId}`, {
+            method: 'DELETE',
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-user-id': userData?.user?.id 
+            }
+        });
+
+        const data = await response.json();
+
+        // Sonuca göre Toast (bildirim) göster ve listeyi güncelle
+        if (response.ok) {
+            showToast("Sipariş başarıyla iptal edildi.", "success");
+            fetchOrders(); // Listeyi yenile ki silinen sipariş ekrandan kaybolsun
+        } else {
+            showToast(data.error || "İptal işlemi başarısız oldu.", "error");
+        }
+    } catch (error) {
+        console.error("İptal Hatası:", error);
+        showToast("Sunucuyla iletişim kurulamadı.", "error");
+    }
 };

@@ -367,4 +367,37 @@ body {
     .password-section, .logout-section { width: 100%; }
     .order-body { flex-direction: column; align-items: flex-start; }
     .order-items-preview { justify-content: flex-start; }
-}
+}
+
+/* --- SİPARİŞ İPTAL BUTONU VE HEADER DÜZENİ --- */
+.order-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-title-group {
+    display: flex;
+    gap: 15px; /* Sipariş no ve statü arasına biraz boşluk */
+    align-items: center;
+}
+
+.cancel-order-btn {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cancel-order-btn:hover {
+    background-color: #dc2626; /* Üzerine gelince biraz koyulaşsın */
+}
