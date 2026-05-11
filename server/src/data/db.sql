@@ -119,3 +119,42 @@ VALUES
 ('Atlas Streamer PC', 'Ryzen 7 7700 + RTX 4070 yayıncı sistemi.', 42000.00, 5, 'Hazır Sistem', '/assets/img/products/HazirSistemler/AtlasStreamerPC.jpg'),
 ('Atlas Office Pro', 'i3-12100 + 16GB RAM iş bilgisayarı.', 12500.00, 20, 'Hazır Sistem', '/assets/img/products/HazirSistemler/AtlasOfficePro.jpg'),
 ('Atlas Master AM5', 'Ryzen 5 7600 + RTX 4060 Ti canavarı.', 31500.00, 8, 'Hazır Sistem', '/assets/img/products/HazirSistemler/AtlasMasterAM5.jpg');
+
+-- =====================================
+-- SEPET (CART) TABLOSU
+-- =====================================
+CREATE TABLE CartItems (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    UserId INT NOT NULL,
+    ProductId INT NOT NULL,
+    Quantity INT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (UserId) REFERENCES Users(id),
+    FOREIGN KEY (ProductId) REFERENCES Products(Id) ON DELETE CASCADE
+);
+
+-- =====================================
+-- SİPARİŞLER (ORDERS) TABLOSU
+-- =====================================
+CREATE TABLE Orders (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    OrderNumber NVARCHAR(50) UNIQUE NOT NULL,
+    UserId INT NOT NULL,
+    TotalAmount DECIMAL(18,2) NOT NULL,
+    Status NVARCHAR(50) DEFAULT 'Hazırlanıyor',
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (UserId) REFERENCES Users(id)
+);
+
+-- =====================================
+-- SİPARİŞ DETAYLARI (ORDER ITEMS) TABLOSU
+-- =====================================
+CREATE TABLE OrderItems (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    OrderId INT NOT NULL,
+    ProductId INT NOT NULL,
+    Quantity INT NOT NULL,
+    UnitPrice DECIMAL(18,2) NOT NULL,
+    FOREIGN KEY (OrderId) REFERENCES Orders(Id) ON DELETE CASCADE,
+    FOREIGN KEY (ProductId) REFERENCES Products(Id)
+);

@@ -77,7 +77,13 @@ exports.login = async (req, res) => {
         }
 
         console.log(`Giriş başarılı: ${email}`);
-        res.status(200).json({ message: 'Başarıyla giriş yapıldı.', user: { email: user.email } });
+        res.status(200).json({ 
+            message: 'Başarıyla giriş yapıldı.', 
+            user: { 
+                id: user.id,
+                email: user.email 
+            } 
+        });
     } catch (err) {
         console.error('Giriş Hatası (Detaylı):', err);
         res.status(500).json({ error: 'Sunucu hatası oluştu.' });
