@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kategori | AtlasTech</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <h2><a href="index.html"><i class="fa-solid fa-microchip"></i> AtlasTech</a></h2>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="İşlemci, ekran kartı, anakart ara...">
+            <button><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <div class="user-actions">
+            <a href="../login/index.html"><i class="fa-regular fa-user"></i> Hesabım</a>
+            <a href="../favorites/index.html"><i class="fa-regular fa-heart"></i> Favoriler</a>
+            <a href="../cart/index.html"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+        </div>
+    </header>
+
+    <nav class="category-nav">
+        <ul>
+            <li><a href="index.html">Ana Sayfa</a></li>
+            <li><a href="category.html?cat=İşlemciler">İşlemciler</a></li>
+            <li><a href="category.html?cat=Ekran Kartları">Ekran Kartları</a></li>
+            <li><a href="category.html?cat=Anakartlar">Anakartlar</a></li>
+            <li><a href="category.html?cat=RAM">Bellek (RAM)</a></li>
+            <li><a href="category.html?cat=SSD">Depolama (SSD)</a></li>
+            <li><a href="category.html?cat=Hazır Sistem">Hazır Sistemler</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="products-section">
+            <h3 class="section-title" id="category-title">Ürünler</h3>
+            <div class="product-grid">
+                <!-- Ürünler app.js tarafından dinamik yüklenecek -->
+                <div class="loading">Ürünler yükleniyor...</div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-columns">
+            <div class="column">
+                <h4>AtlasTech</h4>
+                <p>En yeni bilgisayar parçaları, güvenli alışveriş ve hızlı kargo ile kapınızda.</p>
+            </div>
+            <div class="column">
+                <h4>Müşteri Hizmetleri</h4>
+                <ul>
+                    <li><a href="../support/faq.html">Sıkça Sorulan Sorular (SSS)</a></li>
+                    <li><a href="../support/returns.html">İptal ve İade Koşulları</a></li>
+                </ul>
+            </div>
+            <div class="column">
+                <h4>Bizi Takip Edin</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-discord"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profilim | E-Ticaret</title>
+    <link rel="stylesheet" href="../home/style.css">
     <link rel="stylesheet" href="style.css">
-    </head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
 <body>
     <header class="main-header">
         <div class="logo">
@@ -16,11 +18,23 @@
             <button><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
         <div class="user-actions">
-            <a href="#" id="header-profile-link"><i class="fa-regular fa-user"></i> Hesabım</a>
+            <a href="#" id="header-profile-link" class="active"><i class="fa-regular fa-user"></i> Hesabım</a>
             <a href="../favorites/index.html"><i class="fa-regular fa-heart"></i> Favoriler</a>
-            <a href="#"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+            <a href="../cart/index.html"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
         </div>
     </header>
+
+    <nav class="category-nav">
+        <ul>
+            <li><a href="../home/index.html">Ana Sayfa</a></li>
+            <li><a href="../home/category.html?cat=İşlemciler">İşlemciler</a></li>
+            <li><a href="../home/category.html?cat=Ekran Kartları">Ekran Kartları</a></li>
+            <li><a href="../home/category.html?cat=Anakartlar">Anakartlar</a></li>
+            <li><a href="../home/category.html?cat=RAM">Bellek (RAM)</a></li>
+            <li><a href="../home/category.html?cat=SSD">Depolama (SSD)</a></li>
+            <li><a href="../home/category.html?cat=Hazır Sistem">Hazır Sistemler</a></li>
+        </ul>
+    </nav>
 
 
     <main class="profile-container">
@@ -67,32 +81,37 @@
             <!-- Kart 3: Sipariş Geçmişi -->
             <div class="profile-card">
                 <h2 class="card-title"><i class="fa-solid fa-bag-shopping"></i> Geçmiş Siparişlerim</h2>
-                <div class="order-list">
-                    <div class="order-card">
-                        <div class="order-header">
-                            <span class="order-no">Sipariş No: #SP-8472</span>
-                            <span class="order-status success">Teslim Edildi</span>
-                        </div>
-                        <div class="order-body">
-                            <p><strong>Ürün:</strong> AMD Ryzen 9 7950X 4.5GHz</p>
-                            <p><strong>Tutar:</strong> 16,899,00 TL</p>
-                        </div>
-                    </div>
-                    <div class="order-card">
-                        <div class="order-header">
-                            <span class="order-no">Sipariş No: #SP-8499</span>
-                            <span class="order-status pending">Hazırlanıyor</span>
-                        </div>
-                        <div class="order-body">
-                            <p><strong>Ürün:</strong> ASUS ROG Maximus Z790 Hero</p>
-                            <p><strong>Tutar:</strong> 22,450,00 TL</p>
-                        </div>
-                    </div>
+                <div class="order-list" id="order-list">
+                    <p class="loading-msg">Siparişleriniz yükleniyor...</p>
                 </div>
             </div>
 
         </section>
     </main>
+
+    <footer class="main-footer">
+        <div class="footer-columns">
+            <div class="column">
+                <h4>AtlasTech</h4>
+                <p>En yeni bilgisayar parçaları, güvenli alışveriş ve hızlı kargo ile kapınızda.</p>
+            </div>
+            <div class="column">
+                <h4>Müşteri Hizmetleri</h4>
+                <ul>
+                    <li><a href="../support/faq.html">Sıkça Sorulan Sorular (SSS)</a></li>
+                    <li><a href="../support/returns.html">İptal ve İade Koşulları</a></li>
+                </ul>
+            </div>
+            <div class="column">
+                <h4>Bizi Takip Edin</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-discord"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script src="app.js"></script>
 </body>

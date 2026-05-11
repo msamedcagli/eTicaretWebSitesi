@@ -12,4 +12,7 @@ router.get('/profile', authController.getProfile);
 // Şifre değiştirme rotası
 router.post('/change-password', authController.changePassword);
 
+// Çıkış yapma rotası (Log amaçlı)
+router.post('/logout', authController.logout);
+
 module.exports = router;

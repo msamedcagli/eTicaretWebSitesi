@@ -76,7 +76,7 @@ exports.login = async (req, res) => {
             return res.status(401).json({ error: 'Girdiğiniz E-posta veya Parola hatalı.' });
         }
 
-        console.log(`Giriş başarılı: ${email} (ID: ${user.id})`); // Loga da ekleyelim ki göresin
+        console.log(`Giriş başarılı: ${email} (ID: ${user.id})`);
         res.status(200).json({
             message: 'Başarıyla giriş yapıldı.',
             user: {
@@ -176,4 +176,11 @@ exports.changePassword = async (req, res) => {
         console.error("Şifre değiştirme hatası:", err);
         res.status(500).json({ message: "Sunucu hatası oluştu" });
     }
+};
+
+exports.logout = async (req, res) => {
+    // Frontend'den gelen email veya header'daki ID üzerinden log bas
+    const userId = req.headers['x-user-id'];
+    console.log(`Oturum kapatıldı: Kullanıcı ID ${userId || 'Bilinmiyor'}`);
+    res.status(200).json({ message: 'Oturum kapatıldı.' });
 };

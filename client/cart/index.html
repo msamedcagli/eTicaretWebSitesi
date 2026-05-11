@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AtlasTech - Sıkça Sorulan Sorular</title>
+    <title>AtlasTech - Sepetim</title>
     <link rel="stylesheet" href="../home/style.css">
-    <link rel="stylesheet" href="support.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -21,7 +22,7 @@
         <div class="user-actions">
             <a href="../profile/index.html"><i class="fa-regular fa-user"></i> Hesabım</a>
             <a href="../favorites/index.html"><i class="fa-regular fa-heart"></i> Favoriler</a>
-            <a href="../cart/index.html"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
+            <a href="index.html" class="active"><i class="fa-solid fa-cart-shopping"></i> Sepetim</a>
         </div>
     </header>
 
@@ -37,29 +38,32 @@
         </ul>
     </nav>
 
-    <main class="support-page">
-        <div class="support-container">
-            <h1 class="page-title"><i class="fa-regular fa-circle-question"></i> Sıkça Sorulan Sorular (SSS)</h1>
-            
-            <div class="faq-list">
-                <div class="faq-item">
-                    <h3>Siparişim ne zaman kargoya verilir?</h3>
-                    <p>Hafta içi saat 15:00'a kadar verdiğiniz donanım siparişleri aynı gün kargoya teslim edilmektedir. Hazır sistem siparişlerinde ise montaj ve test süreçleri nedeniyle kargoya verilme süresi 2-3 iş gününü bulabilmektedir.</p>
-                </div>
+    <main class="cart-container">
+        <h1 class="page-title">Alışveriş Sepetim</h1>
 
-                <div class="faq-item">
-                    <h3>Hangi kargo şirketleriyle çalışıyorsunuz?</h3>
-                    <p>Müşterilerimize en hızlı ve güvenli hizmeti sunabilmek adına Yurtiçi Kargo ve Kolay Gelsin ile çalışmaktayız. Teslimat adresinize göre sistem en uygun kargo firmasını otomatik olarak belirler.</p>
-                </div>
+        <div class="cart-wrapper">
+            <div class="cart-items-section" id="cart-items-list">
+                <!-- Sepet ürünleri JS ile buraya yüklenecek -->
+                <div class="loading">Sepetiniz yükleniyor...</div>
+            </div>
 
-                <div class="faq-item">
-                    <h3>Satın aldığım ürünlerin garantisi var mı?</h3>
-                    <p>Evet, AtlasTech üzerinden satın aldığınız tüm bilgisayar bileşenleri ve hazır sistemler, aksi belirtilmedikçe en az 2 yıl boyunca resmi Türkiye distribütörü ve üretici garantisi altındadır.</p>
-                </div>
-
-                <div class="faq-item">
-                    <h3>Hazır sistemlerde parça değişikliği yapabilir miyim?</h3>
-                    <p>Elbette. Hazır sistemlerimizin detay sayfasında bulunan "Özelleştir" butonunu kullanarak bütçenize ve ihtiyaçlarınıza göre işlemci, RAM, ekran kartı ve depolama birimlerini değiştirebilirsiniz.</p>
+            <div class="cart-summary-section">
+                <div class="summary-card">
+                    <h3>Sipariş Özeti</h3>
+                    <div class="summary-row">
+                        <span>Ara Toplam</span>
+                        <span id="subtotal">0,00 TL</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Kargo</span>
+                        <span id="shipping">Ücretsiz</span>
+                    </div>
+                    <hr>
+                    <div class="summary-row total">
+                        <span>Toplam</span>
+                        <span id="total-amount">0,00 TL</span>
+                    </div>
+                    <button id="checkout-btn" class="checkout-btn" disabled>ÖDEME YAP</button>
                 </div>
             </div>
         </div>
@@ -74,8 +78,8 @@
             <div class="column">
                 <h4>Müşteri Hizmetleri</h4>
                 <ul>
-                    <li><a href="faq.html">Sıkça Sorulan Sorular (SSS)</a></li>
-                    <li><a href="returns.html">İptal ve İade Koşulları</a></li>
+                    <li><a href="../support/faq.html">Sıkça Sorulan Sorular (SSS)</a></li>
+                    <li><a href="../support/returns.html">İptal ve İade Koşulları</a></li>
                 </ul>
             </div>
             <div class="column">
@@ -89,5 +93,6 @@
         </div>
     </footer>
 
+    <script src="app.js"></script>
 </body>
 </html>
