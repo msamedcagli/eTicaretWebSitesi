@@ -21,3 +21,32 @@
 .remove-btn:hover { background-color: #ef4444; color: white; }
 
 .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: #fff; border-radius: 10px; border: 1px dashed #cbd5e1; }
+/* Body'yi Flex yap */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Sayfa içeriğini esnet */
+.favorites-page {
+    flex: 1; 
+    padding: 40px 20px;
+    background-color: #f8fafc;
+}
+
+/* Footer'ı en dibe it */
+.main-footer {
+    margin-top: auto;
+}
+
+/* Spinner Animasyonu */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.fa-spin {
+    animation: spin 1s linear infinite;
+}

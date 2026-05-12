@@ -401,3 +401,27 @@ body {
 .cancel-order-btn:hover {
     background-color: #dc2626; /* Üzerine gelince biraz koyulaşsın */
 }
+/* --- FOOTER SABİTLEME --- */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.profile-container {
+    flex: 1; /* Orta alanı genişletir */
+}
+
+.main-footer {
+    margin-top: auto; /* Footer'ı en aşağı iter */
+}
+
+/* --- ANIMASYONLAR --- */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.fa-spin {
+    animation: spin 1s linear infinite;
+}

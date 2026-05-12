@@ -1,18 +1,21 @@
-// Favoriler Sayfası Mantığı
+// --- FAVORİLER SAYFASI MANTIĞI ---
 document.addEventListener("DOMContentLoaded", () => {
   const sessionCookie = getCookie("userSession");
   const storageData = localStorage.getItem("kullaniciBilgileri");
   const authLink = document.getElementById("header-profile-link");
 
+  // Arama butonunu aktif et (Yeni Eklendi)
+  enableSearchForFavorites();
+
   if (sessionCookie && storageData) {
     try {
-        const data = JSON.parse(storageData);
-        if (authLink) {
-            authLink.innerHTML = `<i class="fa-regular fa-user"></i> ${data?.user?.name || "Hesabım"}`;
-            authLink.href = "../profile/index.html";
-        }
+      const data = JSON.parse(storageData);
+      if (authLink) {
+        authLink.innerHTML = `<i class="fa-regular fa-user"></i> ${data?.user?.name || "Hesabım"}`;
+        authLink.href = "../profile/index.html";
+      }
     } catch (e) {
-        console.error("Favoriler: LocalStorage ayrıştırma hatası:", e);
+      console.error("Favoriler: LocalStorage ayrıştırma hatası:", e);
     }
   } else {
     showToast("Favorilerinizi görmek için giriş yapmalısınız!", "error");
@@ -25,11 +28,41 @@ document.addEventListener("DOMContentLoaded", () => {
   loadRealFavorites();
 });
 
+// --- ARAMA FONKSİYONU (Yeni Eklendi - KODU BOZMAZ) ---
+function enableSearchForFavorites() {
+  const sBtn = document.querySelector('.search-bar button');
+  const sInput = document.querySelector('.search-bar input');
+
+  if (sBtn && sInput) {
+    sBtn.onclick = (e) => {
+      e.preventDefault();
+      const query = sInput.value.trim();
+      if (query) {
+        // Butona loading ikonu koy
+        sBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        // Arama kelimesiyle kategori sayfasına yönlendir
+        window.location.href = `../home/category.html?search=${encodeURIComponent(query)}`;
+      }
+    };
+
+    sInput.onkeypress = (e) => {
+      if (e.key === 'Enter') sBtn.onclick(e);
+    };
+  }
+}
+
 async function loadRealFavorites() {
   const grid = document.getElementById("favoritesGrid");
   const countText = document.getElementById("favoritesCount");
 
   if (!grid || !countText) return;
+
+  // --- LOADING GÖSTERGESİ (Yeni Eklendi) ---
+  grid.innerHTML = `
+    <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+        <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.5rem; color: #38bdf8;"></i>
+        <p style="margin-top: 15px; color: #64748b; font-weight: 500;">Favorileriniz Yükleniyor...</p>
+    </div>`;
 
   const storageData = localStorage.getItem("kullaniciBilgileri");
   if (!storageData) return;
@@ -45,6 +78,7 @@ async function loadRealFavorites() {
   if (!userId) return;
 
   try {
+    // Veri gelene kadar loading dönsün diye fetch'i bekliyoruz
     const response = await fetch(`http://localhost:5000/api/favorites/${userId}`);
     
     if (!response.ok) {
@@ -89,7 +123,7 @@ async function loadRealFavorites() {
             <h4>${product.Name}</h4>
             <div class="price">${product.Price ? product.Price.toLocaleString("tr-TR") : "0"} ₺</div>
             <div class="button-group">
-                <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${product.Id})">
+                <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${product.Id}, this)">
                     <i class="fa-solid fa-cart-plus"></i> Sepete Ekle
                 </button>
                 <button class="remove-btn" onclick="event.stopPropagation(); removeFavorite(${product.Id})">
@@ -128,7 +162,7 @@ async function removeFavorite(productId) {
   }
 }
 
-async function addToCart(productId) {
+async function addToCart(productId, btn) {
   const storageData = localStorage.getItem("kullaniciBilgileri");
   if (!storageData) {
       showToast("Giriş yapmalısınız!", "error");
@@ -136,6 +170,11 @@ async function addToCart(productId) {
   }
   const userData = JSON.parse(storageData);
   const userId = userData.user ? userData.user.id : userData.id;
+
+  // Buton loading animasyonu
+  const originalContent = btn.innerHTML;
+  btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+  btn.disabled = true;
 
   try {
     const response = await fetch("http://localhost:5000/api/cart/add", {
@@ -151,6 +190,9 @@ async function addToCart(productId) {
     }
   } catch (error) {
     console.error("Favoriler: Sepete ekleme hatası:", error);
+  } finally {
+    btn.innerHTML = originalContent;
+    btn.disabled = false;
   }
 }
 
