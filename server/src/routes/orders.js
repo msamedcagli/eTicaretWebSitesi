@@ -10,4 +10,7 @@ router.get('/', orderController.getUserOrders);
 router.get('/:id', orderController.getOrderDetails);
 router.post('/checkout', orderController.placeOrder);
 
+// BİZİM EKLEDİĞİMİZ SİPARİŞ İPTAL ROTASI
+router.delete('/:id', orderController.cancelOrder);
+
 module.exports = router;

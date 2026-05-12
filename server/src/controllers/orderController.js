@@ -149,3 +149,85 @@ exports.getOrderDetails = async (req, res) => {
         res.status(500).json({ error: 'Sunucu hatası oluştu.' });
     }
 };
+
+// Siparişi İptal Et
+exports.cancelOrder = async (req, res) => {
+    const { id } = req.params; 
+    const userId = req.user.id; 
+    let pool;
+    let transaction;
+
+    // LOG: İptal isteği geldiğini bildir
+    console.log(`\n[SİPARİŞ İPTAL] Kullanıcı (ID: ${userId}), Sipariş (ID: ${id}) için iptal isteği gönderdi.`);
+
+    try {
+        pool = await connectDB();
+        
+        // 1. Sipariş kontrolü
+        const checkOrderResult = await pool.request()
+            .input('id', sql.Int, id)
+            .input('userId', sql.Int, userId)
+            .query('SELECT Id, Status FROM Orders WHERE Id = @id AND UserId = @userId');
+
+        const order = checkOrderResult.recordset[0];
+
+        if (!order) {
+            // LOG: Kötü niyetli veya hatalı istek
+            console.warn(`[UYARI] Kullanıcı (ID: ${userId}), bulunmayan veya kendine ait olmayan bir siparişi (ID: ${id}) silmeye çalıştı!`);
+            return res.status(404).json({ error: 'Sipariş bulunamadı veya bu işlem için yetkiniz yok.' });
+        }
+
+        // 2. Transaction Başlat
+        transaction = new sql.Transaction(pool);
+        await transaction.begin();
+
+        // 3. Ürünleri bul
+        const orderItemsResult = await transaction.request()
+            .input('orderId', sql.Int, id)
+            .query('SELECT ProductId, Quantity FROM OrderItems WHERE OrderId = @orderId');
+
+        const items = orderItemsResult.recordset;
+
+        // 4. Her ürün için stokları geri yükle
+        for (const item of items) {
+            await transaction.request()
+                .input('productId', sql.Int, item.ProductId)
+                .input('quantity', sql.Int, item.Quantity)
+                .query('UPDATE Products SET Stock = Stock + @quantity WHERE Id = @productId');
+            
+            // LOG: Hangi üründen kaç tane iade edildiğini yaz
+            console.log(`[STOK İADE] Ürün (ID: ${item.ProductId}) için ${item.Quantity} adet stok başarıyla geri yüklendi.`);
+        }
+
+        // 5. Alt detayları (OrderItems) sil
+        await transaction.request()
+            .input('orderId', sql.Int, id)
+            .query('DELETE FROM OrderItems WHERE OrderId = @orderId');
+
+        // 6. Ana siparişi (Orders) sil
+        await transaction.request()
+            .input('orderId', sql.Int, id)
+            .query('DELETE FROM Orders WHERE Id = @orderId');
+
+        // 7. İşlemi kaydet
+        await transaction.commit();
+
+        // LOG: Başarı mesajı
+        console.log(`[BAŞARILI] Sipariş (ID: ${id}) tamamen silindi ve iptal işlemi tamamlandı.\n`);
+        
+        res.status(200).json({ message: 'Sipariş başarıyla iptal edildi ve stoklar güncellendi.' });
+
+    } catch (err) {
+        if (transaction) {
+            try {
+                await transaction.rollback();
+                // LOG: Sistemin kendini korumaya alması
+                console.log(`[ROLLBACK] Hata tespit edildi! Sipariş (ID: ${id}) için yapılan tüm işlemler geri alındı.`);
+            } catch (rollbackErr) {
+                console.error('[HATA] Rollback sırasında kritik hata:', rollbackErr);
+            }
+        }
+        console.error('[HATA] Sipariş İptal Hatası:', err);
+        res.status(500).json({ error: 'Sipariş iptal edilirken bir hata oluştu.' });
+    }
+};
