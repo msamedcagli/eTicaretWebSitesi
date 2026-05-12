@@ -170,3 +170,38 @@
         grid-template-columns: 1fr;
     }
 }
+/* --- LAYOUT FIX (FOOTER SABİTLEME) --- */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Kapsayıcıyı esneterek footer'ı aşağıya mühürler */
+main, .cart-container {
+    flex: 1;
+}
+
+.main-footer {
+    margin-top: auto; /* Footer'ı her zaman en aşağı iter */
+}
+
+/* --- ANIMASYONLAR --- */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.fa-spin {
+    animation: spin 1s linear infinite;
+    margin-right: 8px; /* Buton içi metinle arasına boşluk */
+}
+
+/* Boş sepet ikonu için ufak düzeltme */
+.empty-cart i {
+    display: block;
+    margin-bottom: 20px;
+}

@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const totalAmountEl = document.getElementById("total-amount");
     const checkoutBtn = document.getElementById("checkout-btn");
 
+    // --- AKILLI ARAMA AKTİFLEŞTİRME ---
+    enableSearchInCart();
+
     const sessionCookie = getCookie('userSession');
     const storageData = localStorage.getItem('kullaniciBilgileri');
     
@@ -25,10 +28,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function loadCart() {
+        if (cartItemsList) {
+            // --- LOADING SPINNER ---
+            cartItemsList.innerHTML = `
+                <div style="text-align:center; padding:50px; grid-column: 1/-1;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size:2.5rem; color:#2563eb;"></i>
+                    <p style="margin-top:15px; color:#64748b; font-weight:500;">Sepetiniz yükleniyor...</p>
+                </div>`;
+        }
+
         try {
-            const response = await fetch('http://localhost:5000/api/cart', {
-                headers: { 'x-user-id': user?.user?.id }
-            });
+            // Yapay gecikme (Yükleme animasyonunu görmek için)
+            const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+            
+            const [response] = await Promise.all([
+                fetch('http://localhost:5000/api/cart', {
+                    headers: { 'x-user-id': user?.user?.id }
+                }),
+                delay(800) 
+            ]);
             
             if (response.status === 401) {
                 forceLogout();
@@ -89,8 +107,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function updateTotals(total) {
         const formatted = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(total);
-        subtotalEl.textContent = formatted;
-        totalAmountEl.textContent = formatted;
+        if (subtotalEl) subtotalEl.textContent = formatted;
+        if (totalAmountEl) totalAmountEl.textContent = formatted;
+    }
+
+    // --- AKILLI ARAMA FONKSİYONU ---
+    function enableSearchInCart() {
+        const sBtn = document.querySelector('.search-bar button');
+        const sInput = document.querySelector('.search-bar input');
+
+        if (sBtn && sInput) {
+            sBtn.onclick = (e) => {
+                e.preventDefault();
+                const query = sInput.value.trim();
+                if (query) {
+                    sBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+                    window.location.href = `../home/category.html?search=${encodeURIComponent(query)}`;
+                }
+            };
+            sInput.onkeypress = (e) => { if (e.key === 'Enter') sBtn.onclick(e); };
+        }
     }
 
     // Olay Dinleyicileri (Miktar güncelleme ve silme)
@@ -136,7 +172,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!confirm("Siparişi onaylıyor musunuz? Ödeme simüle edilecektir.")) return;
 
         checkoutBtn.disabled = true;
-        checkoutBtn.textContent = "İŞLENİYOR...";
+        checkoutBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> İŞLENİYOR...';
 
         try {
             const response = await fetch('http://localhost:5000/api/orders/checkout', {
@@ -158,7 +194,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 alert(result.error || "Sipariş oluşturulamadı.");
                 checkoutBtn.disabled = false;
                 checkoutBtn.textContent = "ÖDEME YAP";
-                loadCart(); // Stok değişmiş olabilir, sepeti yenile
+                loadCart();
             }
         } catch (error) {
             console.error("Checkout hatası:", error);
